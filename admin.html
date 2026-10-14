@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>SOLIDUS — Selector</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Shippori+Mincho:wght@500&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#F6F3EC;--card:#FBFAF6;--ink:#17160F;--ink2:#46423A;--mute:#8A8476;--faint:#B5AE9F;--rule:#D8D0BF;--rule2:#E6E0D2;--gold:#987A3E;--gold2:#C9B68E;--hit:#F4EDDC;
+  --en:'Cormorant Garamond',serif;--jp:'Shippori Mincho',serif;--sans:'Zen Kaku Gothic New',system-ui,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-variant-numeric:lining-nums;word-break:auto-phrase;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.7;-webkit-font-smoothing:antialiased;line-break:strict}
+button,input,select,textarea{font:inherit;color:inherit}
+button{background:none;border:0;cursor:pointer}
+.ph{display:inline-block}
+.top{position:sticky;top:0;z-index:10;background:rgba(246,243,236,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--rule2)}
+.top .in{max-width:720px;margin:0 auto;padding:0 18px;height:54px;display:flex;align-items:center;justify-content:space-between}
+.wm{font-family:var(--en);font-size:19px;letter-spacing:.24em;font-weight:500}
+.wm small{font-size:11px;letter-spacing:.24em;color:var(--gold);margin-left:10px}
+.who{font-size:12px;color:var(--ink2)}
+.wrap{max-width:720px;margin:0 auto;padding:0 18px 120px}
+.sc{font-family:var(--en);font-size:12px;letter-spacing:.3em;color:var(--gold);text-transform:uppercase;font-weight:500}
+.gate{max-width:420px;margin:90px auto;text-align:center;padding:0 24px}
+.gate h1{font-family:var(--en);font-weight:500;font-size:22px;letter-spacing:.26em;margin-top:10px}
+.gate input{width:100%;height:54px;margin-top:28px;border:0;border-bottom:1px solid var(--ink);background:transparent;text-align:center;font-family:var(--en);font-size:24px;letter-spacing:.18em;outline:none}
+.err{color:#8E3B2E;font-size:12px;min-height:22px;margin-top:10px}
+.btn{display:inline-flex;align-items:center;justify-content:center;height:48px;padding:0 24px;border:1px solid var(--ink);font-size:13px;letter-spacing:.18em}
+.btn.solid{background:var(--ink);color:var(--paper)}
+.btn.w{width:100%}
+.btn.sm{height:36px;padding:0 14px;font-size:12px;letter-spacing:.1em}
+.btn:disabled{opacity:.35;cursor:default}
+.dates{display:flex;border-bottom:1px solid var(--rule2);margin-top:6px;overflow-x:auto;scrollbar-width:none}
+.dates::-webkit-scrollbar{display:none}
+.dates button{flex:1;min-width:80px;padding:12px 4px 10px;color:var(--mute);position:relative}
+.dates .d{font-family:var(--en);font-size:21px;display:block;line-height:1}
+.dates .w2{font-size:10px;letter-spacing:.22em}
+.dates button.on{color:var(--ink)}
+.dates button.on::after{content:"";position:absolute;left:30%;right:30%;bottom:-1px;height:1px;background:var(--gold)}
+.list{margin-top:14px;border-top:1px solid var(--rule)}
+.li{display:grid;grid-template-columns:52px 1fr auto;gap:10px;align-items:center;padding:12px 4px;border-bottom:1px solid var(--rule2);width:100%;text-align:left}
+.li .t{font-family:var(--en);font-size:18px;color:var(--ink2)}
+.li .n{font-size:14px;line-height:1.4}
+.li .n small{display:block;font-size:11px;color:var(--mute)}
+.li .s{font-size:11px;letter-spacing:.12em;padding:3px 9px;border:1px solid var(--rule);color:var(--mute)}
+.li .s.on{border-color:var(--ink);background:var(--ink);color:var(--paper)}
+.li .s.lk{border-color:var(--rule2);color:var(--faint)}
+.ed{margin-top:18px}
+.back{font-size:12px;letter-spacing:.14em;color:var(--ink2);padding:8px 0}
+.rh{border-bottom:1px solid var(--rule);padding:8px 0 14px}
+.rh .k{font-family:var(--jp);font-size:14px}
+.rh .k b{font-family:var(--en);font-size:22px;font-weight:500;margin-left:6px}
+.rh .nm{font-family:var(--jp);font-size:18px;margin-top:2px}
+.rh .m{font-size:12px;color:var(--mute)}
+h3{font-size:11px;letter-spacing:.24em;color:var(--mute);font-weight:500;margin:26px 0 8px;display:flex;justify-content:space-between;align-items:baseline}
+.cap{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;font-family:var(--en);font-size:15px;font-weight:600;box-shadow:inset 0 0 0 1px rgba(0,0,0,.18);flex:none}
+.hr{display:grid;grid-template-columns:24px 1fr;gap:10px;align-items:center;padding:9px 0;border-bottom:1px solid var(--rule2)}
+.hr .nm{font-size:14px;display:flex;justify-content:space-between;gap:8px}
+.hr .nm small{font-family:var(--en);font-size:16px;color:var(--ink2)}
+.mks{grid-column:2;display:flex;gap:4px}
+.mks button{width:36px;height:32px;border:1px solid var(--rule2);font-family:var(--jp);font-size:16px;color:var(--mute)}
+.mks button.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.seg{display:flex;border:1px solid var(--rule);width:max-content;flex-wrap:wrap}
+.seg button{padding:7px 14px;font-size:13px;color:var(--mute)}
+.seg button.on{background:var(--ink);color:var(--paper)}
+select,input[type=number],textarea{width:100%;border:1px solid var(--rule);background:var(--card);padding:10px 12px;border-radius:0;outline:none}
+textarea{min-height:130px;font-family:var(--jp);line-height:1.9}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.lab{font-size:11px;color:var(--mute);letter-spacing:.1em;margin:12px 0 6px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips button{width:40px;height:40px;border:1px solid var(--rule);font-family:var(--en);font-size:18px;color:var(--ink2);background:var(--card)}
+.chips button.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.box{border:1px solid var(--rule);background:var(--card);padding:16px}
+.calc{display:flex;justify-content:space-between;align-items:baseline;margin-top:14px;font-size:13px;color:var(--ink2)}
+.calc b{font-family:var(--en);font-size:22px;color:var(--ink);font-weight:500}
+.bt{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--rule2)}
+.bt .t{font-size:13px;font-weight:500}
+.bt .t small{font-weight:400;color:var(--mute);margin-left:6px}
+.bt .c{font-family:var(--en);font-size:17px;display:block;font-weight:400}
+.bt .a{font-family:var(--en);font-size:18px;text-align:right}
+.bt .a small{display:block;font-family:var(--sans);font-size:10px;color:var(--mute)}
+.bt .x{font-size:11px;color:var(--mute);border:1px solid var(--rule2);padding:4px 8px}
+.chk{display:flex;gap:8px;align-items:center;font-size:13px;margin-top:10px}
+.bar{position:fixed;left:0;right:0;bottom:0;background:rgba(246,243,236,.97);border-top:1px solid var(--rule);padding:12px 18px calc(12px + env(safe-area-inset-bottom))}
+.bar .in{max-width:684px;margin:0 auto;display:flex;gap:10px;align-items:center}
+.bar .msg{flex:1;font-size:12px;color:var(--ink2);line-height:1.5}
+.lock{border:1px solid var(--rule2);padding:12px 14px;font-size:12px;color:var(--ink2);margin-top:14px}
+.note{font-size:11px;color:var(--mute);margin-top:8px;line-height:1.8}
+</style>
+</head>
+<body>
+<header class="top"><div class="in"><div class="wm">SOLIDUS<small>SELECTOR</small></div><div class="who" id="who"></div></div></header>
+<div id="app"></div>
+<script>
+const CFG={"brand": "SOLIDUS", "brand_sub": "PRIVATE RACING OFFICE", "brand_kana": "ソリドゥス", "tagline": "一鞍を、|選び抜く。", "lead": "完全招待制・定員制の、|競馬のための私設室。", "contact_url": "", "contact_label": "入会のご相談", "selector_name": "S.", "selector_title": "セレクター", "plans": [{"id": "selection", "name": "SELECTION", "jp": "セレクション", "price": 100000, "seats": 20, "items": ["スペシャル・セレクション|（印・買い目・見解）", "全成績の閲覧"]}, {"id": "signal", "name": "SIGNAL", "jp": "シグナル", "price": 100000, "seats": 20, "items": ["パターン・シグナル|（締切直前の自動判定）", "全成績の閲覧"]}, {"id": "prive", "name": "PRIVÉ", "jp": "プリヴェ", "price": 300000, "seats": 5, "items": ["セレクションと|シグナルのすべて", "セレクターへの|個別のご質問", "開催日の直通連絡"]}], "legal": {"seller": "", "manager": "", "address": "", "tel": "", "email": "", "price_note": "各プランに表示（税込）。note の販売ページの価格が正です", "extra_fee": "インターネット接続料金・通信料金はお客様のご負担となります。", "payment": "note（ノート株式会社）の決済方法による（クレジットカードほか）", "timing": "ご購入後すぐ、note の購入者向けページでパスをお知らせします。パスはご購入月の末日まで有効です。", "cancel": "デジタルコンテンツの性質上、パスをお知らせした後の返金はいたしかねます。自動更新はありません。翌月もご利用の場合は、翌月分をお買い求めください。"}, "launch_date": "", "decide_min": 7, "note_url": "", "note_label": "ご入会（note）", "unit_yen": 10000, "gas_url": null, "site_url": "https://solidus-racing.github.io/"};
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const ph=s=>String(s||'').split('|').map(x=>`<span class="ph">${esc(x)}</span>`).join('');
+const yen=n=>Math.round(n||0).toLocaleString('ja-JP');
+const ls={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}},del(k){try{localStorage.removeItem(k)}catch(e){}}};
+const WBG={1:'#ffffff',2:'#2b2b2b',3:'#e5342b',4:'#2f6fd0',5:'#f2cf1b',6:'#38a05a',7:'#f0870f',8:'#f0a2bd'};
+const WFG={1:'#111',2:'#fff',3:'#fff',4:'#fff',5:'#111',6:'#fff',7:'#fff',8:'#111'};
+const cap=(u,w)=>`<span class="cap" style="background:${WBG[w]||'#eee'};color:${WFG[w]||'#111'}">${esc(u)}</span>`;
+const MARKS=['◎','○','▲','△','☆','注'], UNIQUE=['◎','○','▲'];
+const SIZE={'単勝':1,'複勝':1,'枠連':2,'馬連':2,'ワイド':2,'馬単':2,'3連複':3,'3連単':3}, ORD={'馬単':1,'3連単':1};
+function combs(a,k){ const o=[]; const f=(s,c)=>{ if(c.length===k){ o.push(c.slice()); return; } for(let i=s;i<a.length;i++){ c.push(a[i]); f(i+1,c); c.pop(); } }; f(0,[]); return o; }
+function perms(a,k){ const o=[]; const f=c=>{ if(c.length===k){ o.push(c.slice()); return; } for(const x of a){ if(c.includes(x)) continue; c.push(x); f(c); c.pop(); } }; f([]); return o; }
+function expand(b){ const t=b.type,k=SIZE[t],m=b.method||'通常',o=!!ORD[t]; let cs=[];
+  if(m==='通常') cs=(b.combos||[]).map(c=>c.map(Number));
+  else if(m==='BOX'){ const hs=[...new Set((b.horses||[]).map(Number))].sort((x,y)=>x-y); cs=o?perms(hs,k):combs(hs,k); }
+  else if(m==='流し'){ const ax=(b.axis||[]).map(Number), ps=(b.partners||[]).map(Number).filter(x=>!ax.includes(x)), need=k-ax.length;
+    if(need>=1&&ax.length) (o?perms(ps,need):combs(ps,need)).forEach(r=>{ if(o&&b.multi) perms(ax.concat(r),k).forEach(c=>cs.push(c)); else cs.push(ax.concat(r)); }); }
+  else if(m==='フォーメーション'){ const legs=(b.legs||[]).map(l=>l.map(Number)).slice(0,k); if(legs.length===k){ let acc=[[]]; legs.forEach(l=>{ const n=[]; acc.forEach(a=>l.forEach(x=>n.push(a.concat([x])))); acc=n; }); cs=acc.filter(c=>new Set(c).size===k); } }
+  const seen=new Set(), out=[]; cs.forEach(c=>{ if(c.length!==k||(t!=='枠連'&&new Set(c).size!==k)) return; const n=o?c:c.slice().sort((x,y)=>x-y), key=n.join(','); if(!seen.has(key)){ seen.add(key); out.push(n); } }); return out; }
+function betText(b){ const o=!!ORD[b.type], j=a=>(a||[]).join('・'), m=b.method||'通常';
+  if(m==='通常') return (b.combos||[]).map(c=>c.join(o?' → ':' – ')).join('　');
+  if(m==='BOX') return j(b.horses); if(m==='流し') return j(b.axis)+(o&&!b.multi?' → ':' – ')+j(b.partners);
+  if(m==='フォーメーション') return (b.legs||[]).map(j).join(' / '); return ''; }
+
+ 
+let ENC=null, SEC={}, ME=null, KEY=null;
+const b64d=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
+const norm=k=>String(k||'').toLowerCase().replace(/[^a-z0-9]/g,'');
+async function sha256hex(s){ const h=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s)); return [...new Uint8Array(h)].map(b=>b.toString(16).padStart(2,'0')).join(''); }
+async function aesOpen(k,x){ k=k instanceof CryptoKey?k:await crypto.subtle.importKey('raw',k,{name:'AES-GCM'},false,['decrypt']);
+  return JSON.parse(new TextDecoder().decode(await crypto.subtle.decrypt({name:'AES-GCM',iv:b64d(x.iv)},k,b64d(x.ct)))); }
+async function openWith(key){ const nk=norm(key); if(!ENC||nk.length<8) return null; const e=ENC.mem[(await sha256hex(ENC.salt+':'+nk)).slice(0,20)]; if(!e) return null;
+  try{ const km=await crypto.subtle.importKey('raw',new TextEncoder().encode(nk),'PBKDF2',false,['deriveKey']);
+    const kek=await crypto.subtle.deriveKey({name:'PBKDF2',salt:b64d(ENC.salt),iterations:ENC.it,hash:'SHA-256'},km,{name:'AES-GCM',length:256},false,['decrypt']);
+    const env=await aesOpen(kek,e); const sec={}; for(const [sid,k] of Object.entries(env.k||{})) if(sid.startsWith('d:')&&ENC.sec[sid]) sec[sid]=await aesOpen(b64d(k),ENC.sec[sid]);
+    SEC=sec; ME=env; KEY=key; return env; }catch(err){ return null; } }
+
+ 
+const PREVIEW=!CFG.gas_url;
+async function api(body){
+  if(PREVIEW){ const all=JSON.parse(ls.get('ecr_admin_preview')||'{}');
+    if(body.action==='list') return {ok:true,picks:{[body.date]:all[body.date]||{}}};
+    if(body.action==='save'){ (all[body.date]=all[body.date]||{})[body.rid]=Object.assign({},body.pick,{saved_at:new Date().toISOString()}); ls.set('ecr_admin_preview',JSON.stringify(all)); return {ok:true}; }
+    if(body.action==='delete'){ if(all[body.date]) delete all[body.date][body.rid]; ls.set('ecr_admin_preview',JSON.stringify(all)); return {ok:true}; } }
+  try{ const r=await fetch(CFG.gas_url,{method:'POST',body:JSON.stringify(Object.assign({key:KEY},body))}); return await r.json(); }
+  catch(e){ return {ok:false,err:'net'}; } }
+
+ 
+const UI={date:null, rid:null, picks:{}, draft:null, nb:{type:'馬連',method:'流し',axis:[],partners:[],horses:[],legs:[[],[],[]],combos:[],multi:false,unit:1000}};
+function todayKey(){ const t=new Date(); return t.getFullYear()+String(t.getMonth()+1).padStart(2,'0')+String(t.getDate()).padStart(2,'0'); }
+function days(){ return Object.keys(SEC).filter(s=>s.startsWith('d:')).map(s=>s.slice(2)).sort().filter(d=>PREVIEW||CFG.sample||d>=todayKey()); }
+function race(rid){ const d=SEC['d:'+UI.date]; return d&&(d.races||[]).find(r=>r.rid===rid); }
+function minsTo(r){ const m=String(r.time||'').match(/(\d+):(\d+)/); if(!m) return null; const d=UI.date, t=new Date(+d.slice(0,4),+d.slice(4,6)-1,+d.slice(6),+m[1],+m[2]); return (t-Date.now())/60000; }
+function locked(r){ if(CFG.sample) return false; const m=minsTo(r); return m!=null&&m<=0; }
+
+function gate(msg){
+  $('#who').textContent='';
+  $('#app').innerHTML=`<div class="gate"><div class="sc">Selector</div><h1>SOLIDUS</h1><input id="k" placeholder="xxxx-xxxx-xxxx" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="20">
+    <div class="err" id="e">${esc(msg||'')}</div><button class="btn solid w" id="go">ENTER</button></div>`;
+  $('#k').oninput=e=>{ const n=norm(e.target.value).slice(0,12); e.target.value=n.replace(/(.{4})(?=.)/g,'$1-'); };
+  $('#k').onkeydown=e=>{ if(e.key==='Enter') $('#go').click(); };
+  $('#go').onclick=async()=>{ const env=await openWith($('#k').value); if(!env) return $('#e').textContent='鍵が違うか、期限が切れています。';
+    if(!env.ed) return $('#e').textContent='セレクター用の鍵ではありません。'; ls.set('ecr_ak',$('#k').value); start(); }; }
+async function start(){ $('#who').innerHTML=`${esc(ME.n)}${PREVIEW?'　<span style="color:#8E3B2E">見本（保存は端末内）</span>':''}`;
+  const ds=days(); if(!UI.date||!ds.includes(UI.date)) UI.date=ds[0]; if(!UI.date){ $('#app').innerHTML='<div class="gate">次の開催の出馬表が出ると、ここに出ます。</div>'; return; }
+  await loadPicks(); listView(); }
+async function loadPicks(){ const r=await api({action:'list',date:UI.date}); UI.picks=(r&&r.ok&&r.picks&&r.picks[UI.date])||{}; }
+function listView(){
+  UI.rid=null; const d=SEC['d:'+UI.date]||{};
+  const ds=days().map(x=>{ const t=new Date(+x.slice(0,4),+x.slice(4,6)-1,+x.slice(6)); return `<button data-d="${x}" class="${x===UI.date?'on':''}"><span class="d">${t.getMonth()+1}.${t.getDate()}</span><span class="w2">${'SUN MON TUE WED THU FRI SAT'.split(' ')[t.getDay()]}</span></button>`; }).join('');
+  $('#app').innerHTML=`<div class="wrap"><nav class="dates">${ds}</nav>
+    <div class="note" style="text-align:center;margin-top:14px">${ph('選定したレースは、|保存すると数分で|会員ページに出ます。|発走後は変更できません。')}</div>
+    <div class="list">${(d.races||[]).filter(r=>(r.runners||[]).length).map(r=>{ const p=UI.picks[r.rid], lk=locked(r);
+      return `<button class="li" data-r="${r.rid}"><span class="t">${esc(r.time)}</span><span class="n">${esc(r.place)}${esc(r.R)}R　${esc(r.name)}<small>${esc(r.surface||'')}${esc(r.dist||'')}m　${(r.runners||[]).length}頭</small></span>
+        <span class="s ${p?'on':''} ${lk&&!p?'lk':''}">${p?'選定済み':lk?'締切':'—'}</span></button>`; }).join('')}</div></div>`;
+  $$('.dates button').forEach(b=>b.onclick=async()=>{ UI.date=b.dataset.d; await loadPicks(); listView(); });
+  $$('.li').forEach(b=>b.onclick=()=>edit(b.dataset.r));
+}
+function edit(rid){
+  UI.rid=rid; const p=UI.picks[rid];
+  UI.draft=p?JSON.parse(JSON.stringify({marks:p.marks||{},bets:p.bets||[],comment:p.comment||'',level:p.level||null})):{marks:{},bets:[],comment:'',level:null};
+  render(); scrollTo(0,0); }
+function render(){
+  const r=race(UI.rid), D=UI.draft, lk=locked(r), nb=UI.nb;
+  const hs=(r.runners||[]);
+  const k=SIZE[nb.type], o=!!ORD[nb.type], wk=nb.type==='枠連';
+  const pool=wk?[1,2,3,4,5,6,7,8].map(w=>({uno:w,waku:w})):hs;
+  const chipRow=(f,leg)=>`<div class="chips">${pool.map(h=>{ const arr=leg!=null?nb.legs[leg]:nb[f]; return `<button data-f="${f}" ${leg!=null?`data-l="${leg}"`:''} data-u="${h.uno}" class="${arr.includes(h.uno)?'on':''}">${h.uno}</button>`; }).join('')}</div>`;
+  const methods=k===1?['通常']:['流し','BOX','フォーメーション'];
+  if(!methods.includes(nb.method)) nb.method=methods[0];
+  let pick='';
+  if(nb.method==='通常') pick=`<div class="lab">馬番（1頭ずつ1点）</div>${chipRow('horses')}`;
+  else if(nb.method==='BOX') pick=`<div class="lab">ボックスに入れる${wk?'枠':'馬'}</div>${chipRow('horses')}`;
+  else if(nb.method==='流し') pick=`<div class="lab">軸${o?'（着順の前から）':''}</div>${chipRow('axis')}<div class="lab">相手</div>${chipRow('partners')}${o?`<label class="chk"><input type="checkbox" id="multi" ${nb.multi?'checked':''}>マルチ（着順を問わない）</label>`:''}`;
+  else pick=[...Array(k).keys()].map(i=>`<div class="lab">${o?(i+1)+'着':(i+1)+'頭目'}</div>${chipRow('legs',i)}`).join('');
+  const cur=newBet(), n=cur?expand(cur).length:0;
+  const total=D.bets.reduce((a,b)=>a+expand(b).length*b.unit,0);
+  $('#app').innerHTML=`<div class="wrap ed"><button class="back" id="bk">← レース一覧</button>
+    <div class="rh"><div class="k">${esc(r.place)}<b>${esc(r.R)}R</b>　<span style="font-family:var(--en);font-size:18px;color:var(--ink2)">${esc(r.time)}</span></div><div class="nm">${esc(r.name)}</div><div class="m">${esc(r.surface||'')}${esc(r.dist||'')}m　${hs.length}頭</div></div>
+    ${lk?`<div class="lock">${ph('発走時刻を過ぎたため、|変更できません。')}</div>`:''}
+    <h3><span>印</span><span>${Object.keys(D.marks).length}頭</span></h3>
+    ${hs.map(h=>`<div class="hr">${cap(h.uno,h.waku)}<div class="nm"><span>${esc(h.name)}</span><small>${h.odds?h.odds.toFixed(1):''}</small></div>
+      <div class="mks">${MARKS.map(m=>`<button data-u="${h.uno}" data-m="${m}" class="${D.marks[h.uno]===m?'on':''}">${m}</button>`).join('')}</div></div>`).join('')}
+    <h3><span>確信度</span></h3>
+    <div class="seg" id="lv">${[['S','S'],['A','A'],['B','B'],['','なし']].map(x=>`<button data-v="${x[0]}" class="${(D.level||'')===x[0]?'on':''}">${x[1]}</button>`).join('')}</div>
+    <h3><span>買い目</span><span>合計 ${yen(total)}円</span></h3>
+    ${D.bets.map((b,i)=>`<div class="bt"><span class="t">${esc(b.type)}<small>${esc(b.method==='通常'?'':b.method==='BOX'?'ボックス':b.method+(b.multi?'・マルチ':''))}</small><span class="c">${esc(betText(b))}</span></span>
+      <span class="a">${yen(expand(b).length*b.unit)}<small>${expand(b).length}点 × ${yen(b.unit)}</small></span><button class="x" data-i="${i}">削除</button></div>`).join('')||'<div class="note">まだありません。</div>'}
+    <div class="box" style="margin-top:14px">
+      <div class="row"><div><div class="lab" style="margin-top:0">券種</div><select id="ty">${Object.keys(SIZE).map(t=>`<option ${t===nb.type?'selected':''}>${t}</option>`).join('')}</select></div>
+        <div><div class="lab" style="margin-top:0">方式</div><select id="me">${methods.map(m=>`<option value="${m}" ${m===nb.method?'selected':''}>${m==='通常'?'1点ずつ':m==='BOX'?'ボックス':m}</option>`).join('')}</select></div></div>
+      ${pick}
+      <div class="lab">1点あたり（円・100円単位）</div><input type="number" id="un" min="100" step="100" value="${nb.unit}">
+      <div class="calc"><span>${n}点 × ${yen(nb.unit)}円</span><b>${yen(n*nb.unit)}円</b></div>
+      <button class="btn w" id="add" style="margin-top:12px" ${n&&!lk?'':'disabled'}>この買い目を加える</button>
+    </div>
+    <h3><span>見解</span><span>${(D.comment||'').length} / 1200</span></h3>
+    <textarea id="cm" maxlength="1200" placeholder="このレースを選んだ理由、展開、馬の見立てなど">${esc(D.comment)}</textarea>
+    <div class="note">${ph('会員ページには、|書いたとおりの改行で|表示されます。')}</div>
+  </div>
+  <div class="bar"><div class="in"><div class="msg" id="msg">${UI.picks[UI.rid]?'保存済み。変更したら、もう一度「掲示する」を押してください。':'まだ掲示していません。'}</div>
+    ${UI.picks[UI.rid]&&!lk?'<button class="btn sm" id="del">取り下げ</button>':''}<button class="btn solid sm" id="save" ${lk?'disabled':''}>掲示する</button></div></div>`;
+  $('#bk').onclick=()=>listView();
+  $$('.mks button').forEach(b=>b.onclick=()=>{ if(lk) return; const u=+b.dataset.u, m=b.dataset.m;
+    if(D.marks[u]===m){ delete D.marks[u]; } else { if(UNIQUE.includes(m)) Object.keys(D.marks).forEach(x=>{ if(D.marks[x]===m) delete D.marks[x]; }); D.marks[u]=m; } render(); });
+  $$('#lv button').forEach(b=>b.onclick=()=>{ if(lk) return; D.level=b.dataset.v||null; render(); });
+  $$('.bt .x').forEach(b=>b.onclick=()=>{ if(lk) return; D.bets.splice(+b.dataset.i,1); render(); });
+  $('#ty').onchange=e=>{ nb.type=e.target.value; nb.axis=[]; nb.partners=[]; nb.horses=[]; nb.legs=[[],[],[]]; render(); };
+  $('#me').onchange=e=>{ nb.method=e.target.value; render(); };
+  $('#un').onchange=e=>{ nb.unit=Math.max(100,Math.round((+e.target.value||100)/100)*100); render(); };
+  if($('#multi')) $('#multi').onchange=e=>{ nb.multi=e.target.checked; render(); };
+  $$('.chips button').forEach(b=>b.onclick=()=>{ const u=+b.dataset.u, f=b.dataset.f, arr=f==='legs'?nb.legs[+b.dataset.l]:nb[f]; const i=arr.indexOf(u); if(i>=0) arr.splice(i,1); else arr.push(u); arr.sort((a,b)=>a-b); render(); });
+  $('#add').onclick=()=>{ const b=newBet(); if(!b||!expand(b).length) return; D.bets.push(b); nb.axis=[]; nb.partners=[]; nb.horses=[]; nb.legs=[[],[],[]]; render(); };
+  $('#cm').oninput=e=>{ D.comment=e.target.value; };
+  $('#save').onclick=async()=>{ D.comment=$('#cm').value; if(!Object.keys(D.marks).length&&!D.bets.length) return $('#msg').textContent='印か買い目を入れてください。';
+    $('#save').disabled=true; $('#msg').textContent='保存しています…';
+    const res=await api({action:'save',date:UI.date,rid:UI.rid,pick:D});
+    if(res&&res.ok){ UI.picks[UI.rid]=JSON.parse(JSON.stringify(D)); const y=scrollY; render(); scrollTo(0,y); $('#msg').textContent='保存しました。数分で会員ページに出ます。'; return; }
+    else $('#msg').textContent='保存できませんでした（'+((res&&res.err)||'通信')+'）。もう一度押してください。';
+    $('#save').disabled=false; };
+  if($('#del')) $('#del').onclick=async()=>{ if(!confirm('このレースの選定を取り下げますか？')) return; const res=await api({action:'delete',date:UI.date,rid:UI.rid});
+    if(res&&res.ok){ delete UI.picks[UI.rid]; listView(); } else $('#msg').textContent='取り下げできませんでした。'; };
+}
+function newBet(){ const nb=UI.nb, k=SIZE[nb.type], b={type:nb.type,method:nb.method,unit:nb.unit};
+  if(nb.method==='通常'){ if(k!==1) return null; b.combos=nb.horses.map(u=>[u]); }
+  else if(nb.method==='BOX') b.horses=nb.horses.slice();
+  else if(nb.method==='流し'){ b.axis=nb.axis.slice(); b.partners=nb.partners.slice(); if(ORD[nb.type]) b.multi=!!nb.multi; }
+  else b.legs=nb.legs.slice(0,k).map(l=>l.slice());
+  return b; }
+
+(async()=>{ ENC=await fetch('enc.json?_='+Date.now(),{cache:'no-store'}).then(r=>r.ok?r.json():null).catch(()=>null);
+  const k=ls.get('ecr_ak'); if(k&&await openWith(k)&&ME.ed) start(); else gate(); })();
+</script>
+</body>
+</html>

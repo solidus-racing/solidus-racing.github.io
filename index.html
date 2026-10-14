@@ -1,0 +1,722 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>SOLIDUS</title>
+<meta name="description" content="完全招待制・定員制の競馬の私設室。セレクターの選定と、検証を通ったパターンの自動判定。">
+<meta name="theme-color" content="#0E0D0B">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Shippori+Mincho:wght@500;600&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme:dark;
+  --paper:#0E0D0B; --paper2:#131210; --card:#16140F; --ink:#EDE6D6; --ink2:#BDB4A2; --mute:#8C8474; --faint:#5F594B;
+  --rule:#3A3326; --rule2:#2A261E; --gold:#C6A15B; --gold2:#6E5A33; --hit:rgba(198,161,91,.10); --onGold:#0E0D0B;
+  --en:'Cormorant Garamond','Times New Roman',serif; --jp:'Shippori Mincho','Hiragino Mincho ProN','Yu Mincho',serif;
+  --sans:'Zen Kaku Gothic New','Hiragino Sans','Yu Gothic',system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{font-variant-numeric:lining-nums;word-break:auto-phrase;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.85;letter-spacing:.02em;
+  -webkit-font-smoothing:antialiased;line-break:strict;overflow-wrap:anywhere}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+.ph{display:inline-block}
+.num{font-family:var(--en);font-variant-numeric:lining-nums tabular-nums;letter-spacing:.01em}
+.en{font-family:var(--en)}
+.sc{font-family:var(--en);font-size:12px;letter-spacing:.32em;text-transform:uppercase;color:var(--gold);font-weight:500}
+.wrap{max-width:1040px;margin:0 auto;padding:0 24px}
+.narrow{max-width:680px;margin:0 auto;padding:0 20px}
+.rule{width:44px;height:1px;background:var(--gold);margin:22px auto}
+.hide{display:none!important}
+
+
+.top{position:sticky;top:0;z-index:20;background:rgba(14,13,11,.9);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--rule2)}
+.top .in{display:flex;align-items:center;justify-content:space-between;height:56px}
+.wm{font-family:var(--en);font-weight:500;font-size:21px;letter-spacing:.24em;padding-left:.24em}
+.top .lk{font-size:12px;letter-spacing:.14em;color:var(--ink2);display:flex;align-items:center;gap:8px}
+.top .lk svg{width:15px;height:15px}
+
+
+.hero{min-height:calc(100svh - 56px);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:64px 24px 72px;position:relative}
+.hero .crest{width:62px;height:62px;border:1px solid var(--gold);border-radius:50%;box-shadow:inset 0 0 0 4px var(--paper),inset 0 0 0 5px var(--gold2);display:flex;align-items:center;justify-content:center;font-family:var(--en);font-size:30px;font-weight:400;color:var(--gold);margin-bottom:26px;padding-top:2px}
+.hero h1{font-family:var(--en);font-weight:400;font-size:clamp(50px,13vw,104px);letter-spacing:.16em;padding-left:.16em;line-height:1}
+.hero .sub{margin-top:16px}
+.hero .tag{font-family:var(--jp);font-weight:500;font-size:clamp(22px,5.6vw,30px);letter-spacing:.2em;padding-left:.2em;line-height:1.7}
+.hero .lead{margin-top:14px;color:var(--ink2);font-size:14px;letter-spacing:.12em}
+.btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:40px}
+.btn{display:inline-flex;align-items:center;justify-content:center;height:50px;min-width:184px;padding:0 26px;border:1px solid var(--ink);font-size:13px;letter-spacing:.24em;padding-left:calc(26px + .24em);transition:background .25s,color .25s}
+.btn:hover{background:var(--ink);color:var(--paper)}
+.btn.solid{background:transparent;color:var(--gold);border-color:var(--gold)}
+.btn.solid:hover{background:var(--gold);color:var(--onGold)}
+.btn.ghost{border-color:var(--rule);color:var(--ink2)}
+.btn{border-color:var(--rule);color:var(--ink)}
+.btn:hover{border-color:var(--ink)}
+.scroll{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);width:1px;height:40px;background:linear-gradient(var(--gold),transparent)}
+
+.sec{padding:96px 0;border-top:1px solid var(--rule2)}
+.sec .hd{text-align:center;margin-bottom:54px}
+.sec .hd h2{font-family:var(--jp);font-weight:500;font-size:24px;letter-spacing:.18em;padding-left:.18em;margin-top:14px;line-height:1.6}
+.sec .hd p{color:var(--ink2);font-size:14px;margin-top:14px;letter-spacing:.06em}
+
+.svc{display:grid;grid-template-columns:1fr 1fr;gap:0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.svc>div{padding:44px 40px 48px}
+.svc>div+div{border-left:1px solid var(--rule)}
+.svc .no{font-family:var(--en);font-size:56px;font-weight:400;color:var(--gold2);line-height:1;font-variant-numeric:lining-nums}
+.svc h3{font-family:var(--en);font-weight:500;font-size:22px;letter-spacing:.2em;margin-top:22px}
+.svc .jt{font-family:var(--jp);font-size:15px;letter-spacing:.14em;color:var(--ink2);margin-top:2px}
+.svc p{margin-top:22px;font-size:14px;color:var(--ink2);line-height:2.05}
+.svc ul{list-style:none;margin-top:22px;border-top:1px solid var(--rule2)}
+.svc li{font-size:13px;padding:11px 0;border-bottom:1px solid var(--rule2);display:flex;gap:12px;align-items:baseline;color:var(--ink2)}
+.svc li>span.t{flex:1}
+.svc li::before{content:"";flex:none;width:5px;height:5px;border:1px solid var(--gold);transform:rotate(45deg) translateY(-2px)}
+
+.steps{list-style:none;max-width:620px;margin:0 auto;position:relative}
+.steps::before{content:"";position:absolute;left:23px;top:10px;bottom:10px;width:1px;background:var(--rule)}
+.steps li{display:grid;grid-template-columns:48px 1fr;gap:18px;padding:16px 0}
+.steps .k{width:47px;height:47px;border:1px solid var(--rule);border-radius:50%;background:var(--paper);display:flex;align-items:center;justify-content:center;font-family:var(--en);font-size:17px;color:var(--gold);position:relative}
+.steps .w{font-size:12px;letter-spacing:.18em;color:var(--gold);font-weight:500;margin-top:2px}
+.steps .t{font-family:var(--jp);font-size:17px;letter-spacing:.08em;margin-top:2px;line-height:1.7}
+.steps .d{font-size:13px;color:var(--ink2);margin-top:4px}
+
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.kpis>div{padding:26px 18px;text-align:center}
+.kpis>div+div{border-left:1px solid var(--rule2)}
+.kpis .v{font-family:var(--en);font-size:40px;line-height:1.1;font-variant-numeric:lining-nums;white-space:nowrap}
+.kpis .v small{font-size:20px;margin-left:2px}
+.kpis .l{font-size:11px;letter-spacing:.2em;color:var(--mute);margin-top:8px}
+.recpub{max-width:760px;margin:0 auto}
+.recpub h3{font-family:var(--en);font-weight:500;font-size:16px;letter-spacing:.24em;margin:0 0 14px;display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:2px 12px;white-space:nowrap}
+.recpub h3 span{font-family:var(--sans);font-size:11px;letter-spacing:.1em;color:var(--mute)}
+.recpub .blk+.blk{margin-top:44px}
+.bt{border:1px solid var(--rule);background:var(--card);padding:26px 24px;margin-top:22px}
+.bt .h{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+.bt .h b{font-family:var(--jp);font-weight:500;font-size:15px;letter-spacing:.08em}
+.bt .h span{font-size:11px;color:var(--mute);letter-spacing:.12em}
+.btr{margin-top:16px;border-top:1px solid var(--rule)}
+.btr .lb{font-size:12px;color:var(--ink2);padding:10px 0 4px;letter-spacing:.06em}
+.btr .g{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid var(--rule2)}
+.btr .g>div{padding:6px 2px 10px;text-align:center}
+.btr .g .l{font-size:10px;color:var(--mute);letter-spacing:.04em;line-height:1.5}
+.btr .g .v{font-family:var(--en);font-size:21px;white-space:nowrap;line-height:1.3}
+.btr .g .v small,.bt .yr .v small{font-size:12px;margin-left:1px}
+.bt table{width:100%;border-collapse:collapse;margin-top:16px;font-size:13px}
+.bt th{font-weight:400;color:var(--mute);font-size:11px;letter-spacing:.1em;text-align:right;padding:6px 0;border-bottom:1px solid var(--rule)}
+.bt th:first-child,.bt td:first-child{text-align:left}
+.bt td{text-align:right;padding:10px 0;border-bottom:1px solid var(--rule2)}
+.bt td .num{font-size:17px}
+.bt .yr{display:flex;gap:0;margin-top:16px;border:1px solid var(--rule2)}
+.bt .yr>div{flex:1;text-align:center;padding:10px 4px}
+.bt .yr>div+div{border-left:1px solid var(--rule2)}
+.bt .yr .l{font-size:11px;color:var(--mute)}
+.bt .yr .v{font-family:var(--en);font-size:20px}
+.bt .note{font-size:12px;color:var(--ink2);margin-top:14px;line-height:1.9}
+.bt .note+.note{margin-top:6px}
+.empty{text-align:center;color:var(--ink2);font-size:14px;padding:30px 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+
+.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.plan{border:1px solid var(--rule);background:var(--card);padding:38px 28px 34px;display:flex;flex-direction:column;text-align:center}
+.plan.top3{border-color:var(--gold2);background:#1A1712;position:relative}
+.plan.top3::before{content:"";position:absolute;inset:5px;border:1px solid var(--rule2);pointer-events:none}
+.plan .nm{font-family:var(--en);font-size:26px;letter-spacing:.22em;padding-left:.22em;font-weight:500}
+.plan .jn{font-size:11px;letter-spacing:.24em;color:var(--mute);margin-top:2px}
+.plan .pr{margin-top:26px;font-family:var(--en);font-size:38px;line-height:1;font-variant-numeric:lining-nums}
+.plan .pr small{font-family:var(--sans);font-size:12px;color:var(--mute);margin-left:6px;letter-spacing:.06em}
+.plan .seat{font-size:11px;letter-spacing:.16em;color:var(--gold);margin-top:12px}
+.plan ul{list-style:none;margin-top:26px;border-top:1px solid var(--rule2);text-align:left;flex:1}
+.plan li{font-size:13px;padding:12px 2px;border-bottom:1px solid var(--rule2);color:var(--ink2);line-height:1.7}
+.adm{text-align:center}
+.adm p{font-family:var(--jp);font-size:16px;letter-spacing:.1em;line-height:2.1}
+.adm .s{font-family:var(--sans);font-size:12px;color:var(--mute);margin-top:12px;letter-spacing:.06em}
+
+.foot{border-top:1px solid var(--rule);padding:46px 0 60px;text-align:center;font-size:12px;color:var(--mute)}
+.foot .wm{font-size:17px;color:var(--ink)}
+.foot nav{display:flex;gap:22px;justify-content:center;flex-wrap:wrap;margin:22px 0 18px;letter-spacing:.08em}
+.foot nav a{color:var(--ink2)}
+.foot .fine{line-height:2;letter-spacing:.04em}
+
+
+.legal{padding:60px 0 90px}
+.legal h2{font-family:var(--jp);font-weight:500;font-size:22px;letter-spacing:.12em;text-align:center;margin:14px 0 40px}
+.legal dl{border-top:1px solid var(--rule)}
+.legal dl>div{display:grid;grid-template-columns:150px 1fr;gap:16px;padding:16px 0;border-bottom:1px solid var(--rule2);font-size:13px}
+.legal dt{color:var(--mute);letter-spacing:.06em}
+.legal .tbd{color:var(--faint)}
+.legal ol{padding-left:1.4em;font-size:14px;color:var(--ink2)}
+.legal ol li{margin:0 0 14px;line-height:2}
+.back{display:inline-flex;align-items:center;gap:8px;font-size:12px;letter-spacing:.14em;color:var(--ink2);margin-top:36px}
+
+
+.sheet{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.6);display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s}
+.sheet.on{opacity:1;pointer-events:auto}
+.sheet .box{width:100%;max-width:460px;background:var(--paper);padding:40px 28px calc(36px + env(safe-area-inset-bottom));text-align:center;transform:translateY(20px);transition:transform .3s}
+.sheet.on .box{transform:none}
+@media(min-width:600px){.sheet{align-items:center}.sheet .box{border:1px solid var(--rule)}}
+.sheet h3{font-family:var(--en);font-weight:500;font-size:20px;letter-spacing:.26em;padding-left:.26em}
+.sheet p{font-size:13px;color:var(--ink2);margin-top:8px}
+#sheet input{width:100%;height:54px;margin-top:26px;border:0;border-bottom:1px solid var(--ink);background:transparent;text-align:center;font-family:var(--en);font-size:24px;letter-spacing:.18em;outline:none;color:var(--ink);border-radius:0}
+#sheet input::placeholder{color:var(--faint)}
+.sheet .err{color:#D99682;font-size:12px;min-height:22px;margin-top:10px}
+.sheet .btn{width:100%;margin-top:8px}
+.sheet .x{position:absolute;top:0;right:0}
+.sheet.form .box{max-height:92svh;overflow:auto;text-align:left}
+.sheet.form h3{text-align:center}
+.sheet.form p.c{text-align:center}
+.fm label{display:block;font-size:11px;letter-spacing:.14em;color:var(--mute);margin:18px 0 6px}
+.fm label b{color:var(--gold);font-weight:500;margin-left:6px;font-size:10px}
+.fm input[type=text],.fm select,.fm textarea{width:100%;border:0;border-bottom:1px solid var(--rule);background:transparent;padding:8px 2px;font:inherit;font-size:15px;color:var(--ink);outline:none;border-radius:0}
+.fm input[type=text]:focus,.fm select:focus,.fm textarea:focus{border-color:var(--ink)}
+.fm select option{background:var(--card);color:var(--ink)}
+.fm textarea{min-height:88px;resize:vertical;font-family:var(--jp);line-height:1.9}
+.fm .ck{display:flex;gap:10px;align-items:flex-start;font-size:12px;color:var(--ink2);margin-top:14px;line-height:1.8}
+.fm .ck input{margin-top:6px;width:15px;height:15px;flex:none;accent-color:var(--ink)}
+.fm .ck a{border-bottom:1px solid var(--rule)}
+.fm .msg{font-size:12px;min-height:22px;margin-top:12px;text-align:center;color:var(--ink2)}
+.fm .done{text-align:center;padding:30px 0 10px;font-family:var(--jp);font-size:15px;line-height:2.1;letter-spacing:.06em}
+
+
+.mh .in{height:56px}
+.who{font-size:12px;letter-spacing:.08em;color:var(--ink2);display:flex;align-items:center;gap:10px}
+.who b{font-family:var(--jp);font-weight:500;font-size:13px;color:var(--ink)}
+.who button{color:var(--mute);font-size:11px;letter-spacing:.1em;border:1px solid var(--rule);padding:3px 8px}
+.dates{display:flex;gap:0;border-bottom:1px solid var(--rule2);overflow-x:auto;scrollbar-width:none}
+.dates::-webkit-scrollbar{display:none}
+.dates button{flex:1;min-width:84px;padding:14px 6px 12px;text-align:center;position:relative;color:var(--mute)}
+.dates button .d{font-family:var(--en);font-size:22px;line-height:1;color:inherit;font-variant-numeric:lining-nums}
+.dates button .w{font-size:10px;letter-spacing:.24em;margin-top:5px;display:block}
+.dates button.on{color:var(--ink)}
+.dates button.on::after{content:"";position:absolute;left:30%;right:30%;bottom:-1px;height:1px;background:var(--gold)}
+.tabs{display:flex;justify-content:center;gap:34px;padding:18px 0 4px}
+.tabs button{font-family:var(--en);font-size:14px;letter-spacing:.26em;padding:4px 0 6px;color:var(--mute);border-bottom:1px solid transparent;font-weight:500}
+.tabs button.on{color:var(--ink);border-color:var(--gold)}
+.mhd{text-align:center;padding:30px 0 8px}
+.mhd h2{font-family:var(--jp);font-weight:500;font-size:19px;letter-spacing:.14em;margin-top:10px;line-height:1.7}
+.mhd .m{font-size:12px;color:var(--mute);margin-top:6px;letter-spacing:.06em}
+
+.rc{background:var(--card);border:1px solid var(--rule);margin:22px 0;padding:24px 22px 20px;position:relative}
+.rc.hitc{border-color:var(--gold2)}
+.rc .h{display:flex;justify-content:space-between;align-items:baseline}
+.rc .pl{font-family:var(--jp);font-size:14px;letter-spacing:.1em}
+.rc .rn{font-family:var(--en);font-size:24px;margin-left:8px;font-variant-numeric:lining-nums}
+.rc .tm{font-family:var(--en);font-size:20px;color:var(--ink2);font-variant-numeric:lining-nums tabular-nums}
+.rc .nm{font-family:var(--jp);font-weight:500;font-size:18px;letter-spacing:.06em;margin-top:6px;line-height:1.6}
+.rc .meta{font-size:12px;color:var(--mute);margin-top:2px;letter-spacing:.04em}
+.lv{position:absolute;top:-1px;right:22px;font-family:var(--en);font-size:11px;letter-spacing:.2em;background:var(--gold);color:var(--onGold);padding:5px 10px 4px 12px}
+.st{display:inline-flex;align-items:center;gap:7px;font-size:11px;letter-spacing:.16em;padding:5px 11px 4px 13px;border:1px solid var(--rule);color:var(--ink2);margin-top:14px}
+.st.buy{border-color:var(--gold);background:var(--gold);color:var(--onGold)}
+.st.watch .dot{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:pulse 1.6s infinite}
+@keyframes pulse{50%{opacity:.25}}
+.st.hit{border-color:var(--gold);color:var(--gold)}
+.cap{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;font-family:var(--en);font-size:15px;font-weight:600;line-height:1;flex:none;box-shadow:0 0 0 1px rgba(237,230,214,.28);font-variant-numeric:lining-nums}
+.marks{list-style:none;margin-top:18px;border-top:1px solid var(--rule2)}
+.marks li{display:grid;grid-template-columns:26px 24px 1fr auto;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--rule2)}
+.marks .mk{font-family:var(--jp);font-size:18px;text-align:center;line-height:1}
+.marks .hn{font-size:14px;letter-spacing:.04em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.marks .hn small{font-size:11px;color:var(--mute);margin-left:8px}
+.marks .od{font-family:var(--en);font-size:17px;color:var(--ink2);font-variant-numeric:lining-nums tabular-nums}
+.marks .od small{font-family:var(--sans);font-size:10px;color:var(--mute);margin-left:2px}
+.marks li.fin{background:var(--hit)}
+.bets{margin-top:18px}
+.bets .bh{font-size:11px;letter-spacing:.2em;color:var(--mute);display:flex;justify-content:space-between;padding-bottom:6px;border-bottom:1px solid var(--rule)}
+.bet{display:grid;grid-template-columns:1fr auto;gap:2px 12px;padding:11px 0;border-bottom:1px solid var(--rule2)}
+.bet .t{font-size:13px;font-weight:500;letter-spacing:.06em}
+.bet .t small{font-weight:400;color:var(--mute);margin-left:8px;font-size:11px}
+.bet .c{grid-column:1;font-family:var(--en);font-size:18px;letter-spacing:.04em;font-variant-numeric:lining-nums;line-height:1.5}
+.bet .p{grid-column:2;grid-row:1/3;text-align:right;align-self:center}
+.bet .p .a{font-family:var(--en);font-size:19px;font-variant-numeric:lining-nums tabular-nums;display:block;line-height:1.2}
+.bet .p .q{font-size:11px;color:var(--mute)}
+.bet.won{background:linear-gradient(90deg,var(--hit),transparent);box-shadow:inset 2px 0 0 var(--gold);padding-left:10px}
+.bet.lost{opacity:.42}
+.bet .r{grid-column:1/-1;font-size:12px;color:var(--gold);letter-spacing:.06em}
+.tot{display:flex;justify-content:space-between;align-items:baseline;padding:12px 0 0;font-size:12px;color:var(--ink2);letter-spacing:.1em}
+.tot .num{font-size:22px;color:var(--ink)}
+.cm{font-family:var(--jp);font-size:14px;line-height:2.05;margin-top:18px;padding:16px 0 2px;border-top:1px solid var(--rule2);color:var(--ink);white-space:pre-wrap}
+.cm::before{content:"";display:block;width:18px;height:1px;background:var(--gold);margin-bottom:12px}
+.ft{font-size:11px;color:var(--mute);margin-top:16px;letter-spacing:.04em;display:flex;gap:6px 14px;flex-wrap:wrap}
+.res{margin-top:18px;border-top:1px solid var(--gold2);padding-top:14px}
+.res .o{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--ink2);letter-spacing:.1em}
+.res .o .cap{width:22px;height:22px;font-size:14px}
+.res .pl2{display:flex;justify-content:space-between;align-items:baseline;margin-top:12px}
+.res .pl2 .l{font-size:11px;letter-spacing:.18em;color:var(--mute)}
+.res .pl2 .num{font-size:26px}
+.res .pl2 .num.pos{color:var(--gold)}
+.cands{margin-top:16px;border-top:1px solid var(--rule2)}
+.cand{display:grid;grid-template-columns:24px 1fr auto;gap:10px;align-items:center;padding:11px 0;border-bottom:1px solid var(--rule2)}
+.cand .hn{font-size:14px;letter-spacing:.04em;line-height:1.4}
+.cand .f{font-size:11px;color:var(--mute);display:block;letter-spacing:.04em}
+.cand .o{text-align:right}
+.cand .o .num{font-size:20px;display:block;line-height:1.1}
+.cand .o .b{font-size:10px;letter-spacing:.14em}
+.cand .o .b.in{color:var(--gold)}
+.cand .o .b.out{color:var(--mute)}
+.cand.lost{opacity:.45}
+.clock{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--ink2);margin-top:12px;letter-spacing:.06em}
+.clock svg{width:14px;height:14px;color:var(--gold)}
+.rule2{border:0;border-top:1px solid var(--rule2);margin:26px 0}
+.muted{color:var(--mute);font-size:12px}
+.intro{border:1px solid var(--rule2);padding:18px 20px;font-size:13px;color:var(--ink2);margin-top:22px;line-height:1.95;background:transparent}
+.intro b{font-weight:500;color:var(--ink)}
+.seg{display:flex;justify-content:center;gap:0;margin:24px auto 0;border:1px solid var(--rule);width:max-content}
+.seg button{font-family:var(--en);font-size:12px;letter-spacing:.22em;padding:8px 18px 7px 20px;color:var(--mute)}
+.seg button.on{background:var(--gold);color:var(--onGold)}
+.mtab{width:100%;border-collapse:collapse;margin-top:12px;font-size:13px}
+.mtab th{font-weight:400;font-size:11px;letter-spacing:.1em;color:var(--mute);text-align:right;padding:8px 0;border-bottom:1px solid var(--rule)}
+.mtab th:first-child,.mtab td:first-child{text-align:left}
+.mtab td{text-align:right;padding:11px 0;border-bottom:1px solid var(--rule2);font-family:var(--en);font-size:17px;font-variant-numeric:lining-nums tabular-nums}
+.rlist{margin-top:10px}
+.ritem{border-bottom:1px solid var(--rule2)}
+.ritem>button{width:100%;display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:baseline;padding:13px 0;text-align:left}
+.ritem .dt{font-family:var(--en);font-size:15px;color:var(--mute);font-variant-numeric:lining-nums}
+.ritem .rn2{font-size:13px;letter-spacing:.04em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ritem .pf{font-family:var(--en);font-size:17px;font-variant-numeric:lining-nums tabular-nums}
+.ritem .pf.pos{color:var(--gold)}
+.ritem .pf.zero{color:var(--mute)}
+.ritem .dx{padding:0 0 14px}
+.wmk{text-align:center;font-size:10px;letter-spacing:.2em;color:var(--faint);padding:40px 0 70px}
+.sample{position:fixed;left:0;right:0;bottom:0;z-index:40;background:var(--gold);color:var(--onGold);text-align:center;font-size:11px;letter-spacing:.14em;padding:7px 10px calc(7px + env(safe-area-inset-bottom))}
+.fade{opacity:0;transform:translateY(14px);transition:opacity .9s ease,transform .9s ease}
+.fade.in{opacity:1;transform:none}
+
+@media(max-width:760px){
+  .wrap{padding:0 20px}
+  .sec{padding:76px 0}
+  .svc{grid-template-columns:1fr}
+  .svc>div{padding:36px 4px 40px}
+  .svc>div+div{border-left:0;border-top:1px solid var(--rule)}
+  .plans{grid-template-columns:1fr;gap:16px}
+  .kpis .v{font-size:28px}
+  .kpis .v small{font-size:14px}
+  .kpis>div{padding:22px 6px}
+  .legal dl>div{grid-template-columns:1fr;gap:4px}
+}
+@media(max-width:380px){
+  .narrow{padding:0 16px}
+  .rc{padding:22px 16px 18px}
+  .tabs{gap:24px}
+}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap in" id="topin"></div></header>
+<div id="app"></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true">
+  <div class="box">
+    <h3>MEMBERS</h3>
+    <p>お渡しした会員鍵を入力してください。</p>
+    <input id="kin" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="xxxx-xxxx-xxxx" maxlength="20">
+    <div class="err" id="kerr"></div>
+    <button class="btn solid" id="kgo">ENTER</button>
+    <button class="btn ghost" id="kx" style="margin-top:10px">CLOSE</button>
+  </div>
+</div>
+<div class="sheet form" id="apply" role="dialog" aria-modal="true">
+  <div class="box">
+    <h3>ADMISSION</h3>
+    <p class="c">入会のご相談</p>
+    <div class="fm" id="fm"></div>
+  </div>
+</div>
+<script>
+const CFG={"brand": "SOLIDUS", "brand_sub": "PRIVATE RACING OFFICE", "brand_kana": "ソリドゥス", "tagline": "一鞍を、|選び抜く。", "lead": "完全招待制・定員制の、|競馬のための私設室。", "contact_url": "", "contact_label": "入会のご相談", "selector_name": "S.", "selector_title": "セレクター", "plans": [{"id": "selection", "name": "SELECTION", "jp": "セレクション", "price": 100000, "seats": 20, "items": ["スペシャル・セレクション|（印・買い目・見解）", "全成績の閲覧"]}, {"id": "signal", "name": "SIGNAL", "jp": "シグナル", "price": 100000, "seats": 20, "items": ["パターン・シグナル|（締切直前の自動判定）", "全成績の閲覧"]}, {"id": "prive", "name": "PRIVÉ", "jp": "プリヴェ", "price": 300000, "seats": 5, "items": ["セレクションと|シグナルのすべて", "セレクターへの|個別のご質問", "開催日の直通連絡"]}], "legal": {"seller": "", "manager": "", "address": "", "tel": "", "email": "", "price_note": "各プランに表示（税込）。note の販売ページの価格が正です", "extra_fee": "インターネット接続料金・通信料金はお客様のご負担となります。", "payment": "note（ノート株式会社）の決済方法による（クレジットカードほか）", "timing": "ご購入後すぐ、note の購入者向けページでパスをお知らせします。パスはご購入月の末日まで有効です。", "cancel": "デジタルコンテンツの性質上、パスをお知らせした後の返金はいたしかねます。自動更新はありません。翌月もご利用の場合は、翌月分をお買い求めください。"}, "launch_date": "", "decide_min": 7, "note_url": "", "note_label": "ご入会（note）", "unit_yen": 10000, "gas_url": null, "site_url": "https://solidus-racing.github.io/"};
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const ph=s=>String(s||'').split('|').map(x=>`<span class="ph">${esc(x)}</span>`).join('');
+const yen=n=>Math.round(n||0).toLocaleString('ja-JP');
+const pct=(r,c)=>c?(r/c*100).toFixed(1):'—';
+const ls={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}},del(k){try{localStorage.removeItem(k)}catch(e){}}};
+const WBG={1:'#ffffff',2:'#2b2b2b',3:'#e5342b',4:'#2f6fd0',5:'#f2cf1b',6:'#38a05a',7:'#f0870f',8:'#f0a2bd'};
+const WFG={1:'#111',2:'#fff',3:'#fff',4:'#fff',5:'#111',6:'#fff',7:'#fff',8:'#111'};
+const cap=(u,w)=>`<span class="cap" style="background:${WBG[w]||'#eee'};color:${WFG[w]||'#111'}">${esc(u)}</span>`;
+const IC={
+  crest:'<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1"><circle cx="32" cy="32" r="30"/><circle cx="32" cy="32" r="26.5" stroke-width=".6"/><path d="M22 41c2.5-1.2 4-3.3 4.6-6.4.4-2.1 1.7-3.6 3.6-4.3l2.6-1-1.9-1.6c-.8-.7-.9-1.8-.3-2.6l3.8-4.8.5 3.4 3.5 1.6c2.8 1.3 4.5 4.1 4.3 7.2l-.4 5.9c-.1 1.5-1.4 2.6-2.9 2.6H36"/><path d="M26.8 38.4c1.6 1.8 3.9 2.6 6.4 2.6"/><circle cx="37.6" cy="24.8" r=".9" fill="currentColor" stroke="none"/></svg>',
+  key:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M16 7l3 3M14 9l2 2"/></svg>',
+  clock:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
+  back:'<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M15 5l-7 7 7 7"/></svg>'
+};
+
+ 
+let PUB=null, ENC=null, SEC={}, ME=null, MKEY=null;
+const UI={tab:null, date:null, rk:'sel', open:{}};
+function getJSON(u){ return fetch(u+'?_='+Date.now(),{cache:'no-store'}).then(r=>r.ok?r.json():null).catch(()=>null); }
+const b64d=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
+const norm=k=>String(k||'').toLowerCase().replace(/[^a-z0-9]/g,'');
+async function sha256hex(s){ const h=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s)); return [...new Uint8Array(h)].map(b=>b.toString(16).padStart(2,'0')).join(''); }
+async function aesOpen(rawKey,x){ const k=rawKey instanceof CryptoKey?rawKey:await crypto.subtle.importKey('raw',rawKey,{name:'AES-GCM'},false,['decrypt']);
+  return JSON.parse(new TextDecoder().decode(await crypto.subtle.decrypt({name:'AES-GCM',iv:b64d(x.iv)},k,b64d(x.ct)))); }
+async function openWith(key){
+  if(!ENC) return null; const nk=norm(key); if(nk.length<8) return null;
+  const e=ENC.mem[(await sha256hex(ENC.salt+':'+nk)).slice(0,20)]; if(!e) return null;
+  try{
+    const km=await crypto.subtle.importKey('raw',new TextEncoder().encode(nk),'PBKDF2',false,['deriveKey']);
+    const kek=await crypto.subtle.deriveKey({name:'PBKDF2',salt:b64d(ENC.salt),iterations:ENC.it,hash:'SHA-256'},km,{name:'AES-GCM',length:256},false,['decrypt']);
+    const env=await aesOpen(kek,e), sec={};
+    for(const [sid,k] of Object.entries(env.k||{})){ if(ENC.sec[sid]) sec[sid]=await aesOpen(b64d(k),ENC.sec[sid]); }
+    SEC=sec; ME=env; MKEY=key; return env;
+  }catch(err){ return null; }
+}
+
+ 
+function topbar(mode){
+  const t=$('#topin');
+  if(mode==='mem'){
+    t.innerHTML=`<a class="wm" href="#top">${esc(CFG.brand)}</a><div class="who">${ME.ps?`<b class="en" style="letter-spacing:.2em">${esc(planName(ME.p))}</b>`:`<b>${esc(ME.n)}</b>様`}<button id="lo">EXIT</button></div>`;
+    $('#lo').onclick=()=>{ ls.del('ecr_k'); ME=null; SEC={}; location.hash='#top'; };
+  } else {
+    t.innerHTML=`<a class="wm" href="#top">${esc(CFG.brand)}</a><a class="lk" href="#members">${IC.key}<span>MEMBERS</span></a>`;
+  }
+}
+
+ 
+function landing(){
+  topbar('pub');
+  const plans=(CFG.plans||[]).map((p,i,a)=>`<div class="plan ${i===a.length-1?'top3':''} fade">
+      <div class="nm">${esc(p.name)}</div><div class="jn">${esc(p.jp)}</div>
+      <div class="pr">¥${yen(p.price)}<small>／月（税込）</small></div>
+      <div class="seat">定員 ${esc(p.seats)}名</div>
+      <ul>${(p.items||[]).map(x=>`<li>${ph(x)}</li>`).join('')}</ul></div>`).join('');
+  const dm=CFG.decide_min||7;
+  const contact=CFG.note_url?`<a class="btn solid" href="${esc(CFG.note_url)}" target="_blank" rel="noopener">${esc(CFG.note_label||'ご入会')}</a>`:CFG.contact_url?`<a class="btn solid" href="${esc(CFG.contact_url)}" target="_blank" rel="noopener">${esc(CFG.contact_label||'入会のご相談')}</a>`:
+      `<button class="btn solid" data-apply>${esc(CFG.contact_label||'入会のご相談')}</button>`;
+  $('#app').innerHTML=`
+  <section class="hero">
+    <div class="crest">${esc(String(CFG.brand||"").charAt(0))}</div>
+    <div class="sc">${esc(CFG.brand_sub)}</div>
+    <h1 style="margin-top:22px">${esc(CFG.brand)}</h1>
+    <div class="rule"></div>
+    <div class="tag">${ph(CFG.tagline)}</div>
+    <div class="lead">${ph(CFG.lead)}</div>
+    <div class="btns">${contact}<a class="btn" href="#members">MEMBERS</a></div>
+    <div class="scroll"></div>
+  </section>
+
+  <section class="sec" id="svc"><div class="wrap">
+    <div class="hd fade"><div class="sc">I.&nbsp; Services</div><h2>${ph('ふたつの|サービス')}</h2></div>
+    <div class="svc fade">
+      <div>
+        <div class="no">01</div><h3>SPECIAL SELECTION</h3><div class="jt">スペシャル・セレクション</div>
+        <p>${ph(esc(CFG.selector_title)+'が、|その週に勝負すべき|レースだけを選び、|印と買い目を|掲示します。')}</p>
+        <ul><li><span class="t">${ph('券種・点数・金額まで|そのまま')}</span></li><li><span class="t">${ph('見解は、|一鞍ごとに')}</span></li><li><span class="t">${ph('発走後の変更は|いたしません')}</span></li></ul>
+      </div>
+      <div>
+        <div class="no">02</div><h3>PATTERN SIGNAL</h3><div class="jt">パターン・シグナル</div>
+        <p>${ph('過去の検証を|通った条件だけを|機械が見張り、|締切直前のオッズで|判定して|自動で掲示します。')}</p>
+        <ul><li><span class="t">${ph('判定は発走'+dm+'分前に|確定')}</span></li><li><span class="t">${ph('判定の時刻と|その時点のオッズを|毎回記録')}</span></li><li><span class="t">${ph('人の手を|介しません')}</span></li></ul>
+      </div>
+    </div>
+  </div></section>
+
+  <section class="sec"><div class="wrap">
+    <div class="hd fade"><div class="sc">II.&nbsp; Method</div><h2>${ph('シグナルが|掲示されるまで')}</h2></div>
+    <ol class="steps fade">
+      <li><div class="k">i</div><div><div class="w">THE DAY BEFORE</div><div class="t">${ph('出馬表から、|条件に合う馬を|抽出')}</div><div class="d">${ph('オッズ以外の条件で|候補を決めます。')}</div></div></li>
+      <li><div class="k">ii</div><div><div class="w">RACE DAY</div><div class="t">${ph('オッズを|見張り続ける')}</div><div class="d">${ph('会員ページでは|候補の最新オッズが|動きます。')}</div></div></li>
+      <li><div class="k">iii</div><div><div class="w">${dm} MINUTES BEFORE</div><div class="t">${ph('その時点の|オッズで|判定を確定')}</div><div class="d">${ph('買いか見送りかを|掲示し、|以後は動かしません。')}</div></div></li>
+      <li><div class="k">iv</div><div><div class="w">AFTER THE RACE</div><div class="t">${ph('払戻で精算し、|記録に加える')}</div><div class="d">${ph('外れも含めて|すべてを残します。')}</div></div></li>
+    </ol>
+  </div></section>
+
+  <section class="sec"><div class="wrap">
+    <div class="hd fade"><div class="sc">III.&nbsp; Record</div><h2>${ph('すべての掲示を、|そのまま。')}</h2><p>${ph('選んだ結果だけを|見せることはしません。')}</p></div>
+    <div class="recpub fade">${pubRecord()}</div>
+  </div></section>
+
+  <section class="sec" id="plans"><div class="wrap">
+    <div class="hd fade"><div class="sc">IV.&nbsp; Membership</div><h2>${ph('会員制度')}</h2><p>${ph('席数を限って|ご案内しています。')}</p></div>
+    <div class="plans">${plans}</div>
+  </div></section>
+
+  <section class="sec"><div class="wrap adm fade">
+    <div class="sc">V.&nbsp; Admission</div>
+    <div class="rule"></div>
+    <p>${ph('ご入会は、|ご紹介|または面談のうえで|ご案内しています。')}</p>
+    <div class="btns">${contact}</div>
+    <div class="s">${ph('空席がない場合は、|順にご連絡いたします。')}</div>
+  </div></section>
+  ${footer()}`;
+  fades();
+  $$('[data-apply]').forEach(b=>b.onclick=openApply);
+}
+function kpi(s){ const roi=s.cost?(s.ret/s.cost*100):null;
+  return `<div class="kpis"><div><div class="v">${roi==null?'—':roi.toFixed(1)}<small>${roi==null?'':'%'}</small></div><div class="l">回収率</div></div>
+    <div><div class="v">${s.bet||0}</div><div class="l">${ph('掲示レース')}</div></div>
+    <div><div class="v">${s.hit||0}</div><div class="l">的中</div></div></div>`; }
+function btBox(p){ const b=p.bt; if(!b) return '';
+  const st=(l,v)=>`<div><div class="l">${l}</div><div class="v">${v}</div></div>`;
+  return `<div class="bt"><div class="h"><b>${ph('ローンチ前の検証（参考）')}</b><span>${esc(b.period)}</span></div>
+    ${(b.rows||[]).map(r=>`<div class="btr"><div class="lb">${ph(r.label)}</div><div class="g">${st('頭数',r.n)}${st('的中',r.hit)}${st('回収率',r.roi.toFixed(1)+'<small>%</small>')}${st(ph('上位3本|除く'),r.roi_ex3.toFixed(1)+'<small>%</small>')}</div></div>`).join('')}
+    <div class="yr">${(b.years||[]).map(y=>`<div><div class="l">${esc(y[0])}</div><div class="v">${y[1]}<small>%</small></div></div>`).join('')}</div>
+    ${[b.forward,b.caveat,b.note,'過去の成績は、|将来の成績を|保証するものでは|ありません。'].filter(Boolean).map(x=>`<div class="note">${ph(x)}</div>`).join('')}</div>`; }
+function pubRecord(){
+  const R=(PUB&&PUB.rec)||{}, P=(PUB&&PUB.patterns)||[], blk=(nm,jp,s)=>`<div class="blk"><h3>${nm}<span>${s&&s.first?`${fmtD(s.first)} — ${fmtD(s.last)}`:''}</span></h3>${s&&s.n?kpi(s):`<div class="empty">${ph('運用開始の日から、|すべての掲示を|ここに載せます。')}</div>`}</div>`;
+  return blk('SPECIAL SELECTION','',R.sel)+blk('PATTERN SIGNAL','',R.sig)+P.map(btBox).join(''); }
+function fmtD(d){ d=String(d||''); return d.length===8?`${d.slice(0,4)}.${+d.slice(4,6)}.${+d.slice(6)}`:d; }
+function footer(){ return `<footer class="foot"><div class="wrap">
+  <div class="wm">${esc(CFG.brand)}</div>
+  <nav><a href="#legal">特定商取引法に基づく表記</a><a href="#terms">ご利用条件・免責</a><a href="#privacy">プライバシーポリシー</a><a href="#members">会員の方</a></nav>
+  <div class="fine">${ph('馬券の購入は|20歳になってから。')}<br>${ph('的中や利益を|保証するものでは|ありません。')}<br>© ${new Date().getFullYear()} ${esc(CFG.brand)}</div>
+  </div></footer>`; }
+function fades(){ const io='IntersectionObserver' in window?new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} }),{rootMargin:'0px 0px -8% 0px'}):null;
+  $$('.fade').forEach(el=>io?io.observe(el):el.classList.add('in')); }
+
+ 
+function legal(){
+  topbar('pub'); const L=CFG.legal||{}, v=x=>x?esc(x):'<span class="tbd">（準備中）</span>';
+  const rows=[['販売事業者',L.seller],['運営責任者',L.manager],['所在地',L.address],['電話番号',L.tel],['メールアドレス',L.email],
+    ['販売価格',L.price_note],['商品代金以外の必要料金',L.extra_fee],['お支払い方法',L.payment],['提供時期',L.timing],['返品・解約',L.cancel]];
+  $('#app').innerHTML=`<section class="legal"><div class="narrow"><div class="sc" style="text-align:center">Legal Notice</div><h2>${ph('特定商取引法に|基づく表記')}</h2>
+    <dl>${rows.map(r=>`<div><dt>${r[0]}</dt><dd>${v(r[1])}</dd></div>`).join('')}</dl>
+    <a class="back" href="#top">${IC.back}<span>BACK</span></a></div></section>${footer()}`; scrollTo(0,0); }
+function terms(){
+  topbar('pub'); const dm=CFG.decide_min||7;
+  const t=['当サービスが提供する情報は、競馬の予想に関する参考情報です。的中や利益を約束・保証するものではありません。',
+    '馬券の購入はご自身の判断と責任で行ってください。馬券は20歳以上の方のみ購入できます。',
+    '掲示する成績は、掲示したすべてのレースを含みます。シグナルは発走'+dm+'分前のオッズで判定を確定し、セレクションは発走後に変更しません。',
+    '同じレースの選定・判定は、どのプランでも同じ内容です。プランによって買い目を変えることはありません。',
+    '「ローンチ前の検証」は過去のデータによる集計で、運用の成績ではありません。過去の成績は将来の成績を保証しません。',
+    'オッズ・出走取消・結果などの正式な情報は、JRAの発表をご確認ください。表示の遅れや誤りにより損害が生じた場合、当サービスの故意または重大な過失によるときを除き、当サービスが受け取った当月の利用料金を上限として責任を負います。',
+    'パスはご購入月の末日まで有効です。自動更新はありません。パスをお知らせした後の返金はいたしかねますが、当サービスの都合で提供できなかった場合は、その分をお返しします。',
+    '会員鍵はご本人専用です。第三者への譲渡・共有、掲示内容の転載・再配布はお断りします。確認した場合は予告なく利用を停止します。',
+    '回線やシステムの障害により、判定・掲示ができない場合があります。判定の時刻に判定できなかったレースは、記録に含めません。',
+    '入会のご相談でお預かりしたお名前・ご連絡先は、ご入会のご案内とご連絡のためだけに使い、法令に基づく場合を除き第三者に提供しません。'];
+  $('#app').innerHTML=`<section class="legal"><div class="narrow"><div class="sc" style="text-align:center">Terms</div><h2>${ph('ご利用条件・免責')}</h2>
+    <ol>${t.map(x=>`<li>${esc(x)}</li>`).join('')}</ol><a class="back" href="#top">${IC.back}<span>BACK</span></a></div></section>${footer()}`; scrollTo(0,0); }
+
+function planName(id){ const p=(CFG.plans||[]).find(x=>x.id===id); return p?p.name:String(id||'').toUpperCase(); }
+ 
+function openApply(){
+  const plans=(CFG.plans||[]).map(p=>`<option>${esc(p.name)}（${esc(p.jp)}）</option>`).join('');
+  $('#fm').innerHTML=`<label>お名前<b>必須</b></label><input type="text" id="ap_name" maxlength="60" autocomplete="name">
+    <label>ご連絡先（メールまたはお電話）<b>必須</b></label><input type="text" id="ap_contact" maxlength="120" autocomplete="email">
+    <label>ご希望のプラン</label><select id="ap_plan"><option>未定・相談したい</option>${plans}</select>
+    <label>ご紹介者（任意）</label><input type="text" id="ap_ref" maxlength="60">
+    <label>ご質問（任意）</label><textarea id="ap_msg" maxlength="1000"></textarea>
+    <div class="ck"><input type="checkbox" id="ap_age"><span>${ph('20歳以上です。')}</span></div>
+    <div class="ck"><input type="checkbox" id="ap_agree"><span>${ph('ご利用条件と|プライバシーポリシーに|同意します。')}</span></div>
+    <div class="msg" id="ap_m"></div>
+    <button class="btn solid" id="ap_go" style="width:100%;margin-top:6px">SEND</button>
+    <button class="btn ghost" id="ap_x" style="width:100%;margin-top:10px">CLOSE</button>`;
+  $('#apply').classList.add('on');
+  $('#ap_x').onclick=()=>$('#apply').classList.remove('on');
+  $('#ap_go').onclick=async()=>{
+    const f={name:$('#ap_name').value.trim(),contact:$('#ap_contact').value.trim(),plan:$('#ap_plan').value,ref:$('#ap_ref').value.trim(),msg:$('#ap_msg').value.trim(),age:$('#ap_age').checked,agree:$('#ap_agree').checked};
+    const m=$('#ap_m');
+    if(!f.name||!f.contact) return m.textContent='お名前とご連絡先をご記入ください。';
+    if(!f.age||!f.agree) return m.textContent='確認の2項目にチェックをお願いいたします。';
+    if(!CFG.gas_url) return m.textContent='（見本のため送信されません）';
+    $('#ap_go').disabled=true; m.textContent='送信しています…';
+    let r=null; try{ r=await fetch(CFG.gas_url,{method:'POST',body:JSON.stringify({action:'apply',form:f})}).then(x=>x.json()); }catch(e){}
+    if(r&&r.ok){ $('#fm').innerHTML=`<div class="done">${ph('ご相談を|承りました。')}<br>${ph('担当より、|追ってご連絡いたします。')}</div><button class="btn ghost" id="ap_x2" style="width:100%;margin-top:18px">CLOSE</button>`; $('#ap_x2').onclick=()=>$('#apply').classList.remove('on'); }
+    else { $('#ap_go').disabled=false; m.textContent=r&&r.err==='wait'?'少し時間をおいてから、もう一度お送りください。':'送信できませんでした。時間をおいて、もう一度お試しください。'; }
+  };
+}
+
+function privacy(){
+  topbar('pub'); const L=CFG.legal||{};
+  const t=['お預かりする情報：入会のご相談でいただくお名前・ご連絡先・ご希望・ご質問。会員ページでは、ご本人を特定する情報を集めません。',
+    '利用目的：ご入会のご案内、お問い合わせへの回答、サービスに関する重要なお知らせのためだけに使います。',
+    '第三者への提供：法令に基づく場合を除き、ご本人の同意なく第三者に提供しません。',
+    '管理：受け付けた情報は、運営者だけが見られる場所で保管し、目的を終えたものは消去します。',
+    '開示・訂正・削除：ご本人からのご請求があれば、遅滞なく対応します。'+(L.email?'お問い合わせ先：'+L.email:'お問い合わせ先は特定商取引法に基づく表記をご覧ください。'),
+    '会員ページは、ご自身の端末に会員パスと表示の設定だけを保存します（ブラウザの保存領域）。'];
+  $('#app').innerHTML=`<section class="legal"><div class="narrow"><div class="sc" style="text-align:center">Privacy</div><h2>${ph('プライバシー|ポリシー')}</h2>
+    <ol>${t.map(x=>`<li>${esc(x)}</li>`).join('')}</ol><a class="back" href="#top">${IC.back}<span>BACK</span></a></div></section>${footer()}`; scrollTo(0,0); }
+
+ 
+function askKey(){ $('#sheet').classList.add('on'); $('#kerr').textContent=''; setTimeout(()=>$('#kin').focus(),250); }
+function closeKey(){ $('#sheet').classList.remove('on'); }
+$('#kx').onclick=()=>{ closeKey(); if(!ME) location.hash='#top'; };
+$('#kin').addEventListener('input',e=>{ const n=norm(e.target.value).slice(0,12); e.target.value=n.replace(/(.{4})(?=.)/g,'$1-'); });
+$('#kin').addEventListener('keydown',e=>{ if(e.key==='Enter') $('#kgo').click(); });
+$('#kgo').onclick=async()=>{ const k=$('#kin').value; $('#kgo').textContent='…'; const ok=await openWith(k); $('#kgo').textContent='ENTER';
+  if(!ok){ $('#kerr').textContent='鍵が違うか、期限が切れています。'; return; }
+  ls.set('ecr_k',k); closeKey(); $('#kin').value=''; members(); window.scrollTo({top:0,behavior:'instant'}); };
+
+ 
+const DATES=()=>(PUB&&PUB.dates||[]).filter(d=>SEC['d:'+d.date]);
+function todayKey(){ const t=new Date(); return t.getFullYear()+String(t.getMonth()+1).padStart(2,'0')+String(t.getDate()).padStart(2,'0'); }
+function defDate(){ const ds=DATES().map(d=>d.date), t=todayKey(); return ds.find(d=>d>=t)||ds[ds.length-1]; }
+function tabsOf(){ const t=[]; if(Object.keys(SEC).some(s=>s.startsWith('s:'))) t.push(['sel','SELECTION']); if(Object.keys(SEC).some(s=>s.startsWith('g:'))) t.push(['sig','SIGNAL']); t.push(['rec','RECORD']); return t; }
+function members(){
+  if(!ME){ landing(); askKey(); return; }
+  topbar('mem');
+  const tabs=tabsOf(); if(!UI.tab||!tabs.some(t=>t[0]===UI.tab)) UI.tab=tabs[0][0];
+  if(!UI.date||!DATES().some(d=>d.date===UI.date)) UI.date=defDate();
+  if(UI.rk==='sel'&&!SEC['r:sel']) UI.rk='sig';
+  const dates=UI.tab==='rec'?'':`<nav class="dates">${DATES().map(d=>`<button data-d="${d.date}" class="${d.date===UI.date?'on':''}"><span class="d">${d.md}</span><span class="w">${d.en}</span></button>`).join('')}</nav>`;
+  $('#app').innerHTML=`<div class="narrow">${dates}<nav class="tabs">${tabs.map(t=>`<button data-t="${t[0]}" class="${t[0]===UI.tab?'on':''}">${t[1]}</button>`).join('')}</nav>
+    <div id="pane"></div><div class="wmk">${ME.ps?'MEMBERS ONLY':esc(ME.n)+' 様 専用'}</div></div>`;
+  $$('.dates button').forEach(b=>b.onclick=()=>{ UI.date=b.dataset.d; members(); });
+  $$('.tabs button').forEach(b=>b.onclick=()=>{ UI.tab=b.dataset.t; members(); });
+  ({sel:paneSel,sig:paneSig,rec:paneRec})[UI.tab]();
+  liveOdds();
+}
+function raceOf(date,rid){ const d=SEC['d:'+date]; return d&&(d.races||[]).find(r=>r.rid===rid); }
+function runner(r,u){ return (r&&r.runners||[]).find(h=>h.uno==u)||{}; }
+function rcHead(r,extra){ r=r||{}; const sd=r.surface?`${esc(r.surface)}${esc(r.dist)}m`:'';
+  return `<div class="h"><div><span class="pl">${esc(r.place)}</span><span class="rn">${esc(r.R)}R</span></div><div class="tm">${esc(r.time||'')}</div></div>
+    <div class="nm">${esc(r.name||'')}</div><div class="meta">${[sd,r.n?r.n+'頭':(r.runners?r.runners.length+'頭':''),r.going||''].filter(Boolean).join('　')}</div>${extra||''}`; }
+function hm(iso){ const m=String(iso||'').match(/T(\d\d:\d\d)/); return m?m[1]:''; }
+function oddsOf(r,u){ const lo=LIVE[r.rid]; const v=lo&&lo.m[u]; return v!=null?v:runner(r,u).odds; }
+function oddsAt(r){ const lo=LIVE[r.rid]; return lo?lo.at:''; }
+
+ 
+const SIZE={'単勝':1,'複勝':1,'枠連':2,'馬連':2,'ワイド':2,'馬単':2,'3連複':3,'3連単':3}, ORD={'馬単':1,'3連単':1};
+function combs(a,k){ const o=[]; const f=(s,c)=>{ if(c.length===k){ o.push(c.slice()); return; } for(let i=s;i<a.length;i++){ c.push(a[i]); f(i+1,c); c.pop(); } }; f(0,[]); return o; }
+function perms(a,k){ const o=[]; const f=c=>{ if(c.length===k){ o.push(c.slice()); return; } for(const x of a){ if(c.includes(x)) continue; c.push(x); f(c); c.pop(); } }; f([]); return o; }
+function expand(b){ const t=b.type,k=SIZE[t],m=b.method||'通常',o=!!ORD[t]; let cs=[];
+  if(m==='通常') cs=(b.combos||[]).map(c=>c.map(Number));
+  else if(m==='BOX'){ const hs=[...new Set((b.horses||[]).map(Number))].sort((x,y)=>x-y); cs=o?perms(hs,k):combs(hs,k); }
+  else if(m==='流し'){ const ax=(b.axis||[]).map(Number), ps=(b.partners||[]).map(Number).filter(x=>!ax.includes(x)), need=k-ax.length;
+    if(need>=1&&ax.length) (o?perms(ps,need):combs(ps,need)).forEach(r=>{ if(o&&b.multi) perms(ax.concat(r),k).forEach(c=>cs.push(c)); else cs.push(ax.concat(r)); }); }
+  else if(m==='フォーメーション'){ const legs=(b.legs||[]).map(l=>l.map(Number)).slice(0,k); if(legs.length===k){ let acc=[[]]; legs.forEach(l=>{ const n=[]; acc.forEach(a=>l.forEach(x=>n.push(a.concat([x])))); acc=n; }); cs=acc.filter(c=>new Set(c).size===k); } }
+  const seen=new Set(), out=[]; cs.forEach(c=>{ if(c.length!==k||(t!=='枠連'&&new Set(c).size!==k)) return; const n=o?c:c.slice().sort((x,y)=>x-y), key=n.join(','); if(!seen.has(key)){ seen.add(key); out.push(n); } }); return out; }
+function betText(b){ const o=!!ORD[b.type], j=a=>(a||[]).join('・'), m=b.method||'通常';
+  if(m==='通常') return (b.combos||[]).map(c=>c.join(o?' → ':' – ')).join('　');
+  if(m==='BOX') return j(b.horses);
+  if(m==='流し') return j(b.axis)+(o&&!b.multi?' → ':' – ')+j(b.partners);
+  if(m==='フォーメーション') return (b.legs||[]).map(j).join(' / ');
+  return ''; }
+function methodLabel(b){ const m=b.method||'通常'; return m==='通常'?'':(m==='流し'&&b.multi?'流し・マルチ':m==='BOX'?'ボックス':m); }
+function betRow(b,s){ const n=expand(b).length, cls=s?(s.ret>0?'won':'lost'):'';
+  return `<div class="bet ${cls}"><div class="t">${esc(b.type)}${methodLabel(b)?`<small>${esc(methodLabel(b))}</small>`:''}</div>
+    <div class="c">${esc(betText(b))}</div>
+    <div class="p"><span class="a">${yen(n*b.unit)}</span><span class="q">${n}点 × ${yen(b.unit)}</span></div>
+    ${s&&s.ret>0?`<div class="r">${s.refund&&!s.hits.length?'返還':'的中'}　払戻 ${yen(s.ret)}円</div>`:''}</div>`; }
+function resBlock(r,cost,ret){ const o=(r&&r.result&&r.result.order)||[]; if(!o.length) return '';
+  const pl=ret-cost;
+  return `<div class="res"><div class="o"><span>RESULT</span>${o.slice(0,3).map(u=>cap(u,runner(r,u).waku)).join('')}</div>
+    ${cost!=null?`<div class="pl2"><span class="l">払戻 ／ 収支</span><span><span class="num">${yen(ret)}</span><span class="muted">　/　</span><span class="num ${pl>0?'pos':''}">${pl>0?'+':''}${yen(pl)}</span></span></div>`:''}</div>`; }
+
+ 
+function paneSel(){
+  const date=UI.date, S=SEC['s:'+date]||{}, picks=S.picks||{}, setl=S.settled||{};
+  const ids=Object.keys(picks).sort((a,b)=>((raceOf(date,a)||{}).time||'').localeCompare((raceOf(date,b)||{}).time||''));
+  const last=ids.map(i=>picks[i].updated_at).sort().pop();
+  let h=`<div class="mhd"><div class="sc">Special Selection</div><h2>${ph(esc(CFG.selector_name)+' の|選定')}</h2>
+    <div class="m">${ids.length?`${ids.length}鞍${last?`　最終更新 ${hm(last)}`:''}`:''}</div></div>`;
+  if(!ids.length) h+=`<div class="intro" style="text-align:center">${ph('この日の選定は、|決まりしだい|ここに掲示します。')}</div>`;
+  ids.forEach(rid=>{ const x=picks[rid], p=x.pick||{}, r=raceOf(date,rid)||{}, st=setl[rid];
+    const ord=(r.result&&r.result.order)||[], top3=ord.slice(0,3);
+    const mk=Object.entries(p.marks||{}).sort((a,b)=>['◎','○','▲','△','☆','注'].indexOf(a[1])-['◎','○','▲','△','☆','注'].indexOf(b[1]));
+    const sb=st?st.bets:null;
+    const won=st&&st.ret>0;
+    h+=`<article class="rc ${won?'hitc':''}">${p.level?`<span class="lv">LEVEL ${esc(p.level)}</span>`:''}${rcHead(r)}
+      <ul class="marks">${mk.map(([u,m])=>{ const hh=runner(r,u), od=oddsOf(r,u), fin=top3.indexOf(+u);
+        return `<li class="${fin>=0?'fin':''}"><span class="mk">${esc(m)}</span>${cap(u,hh.waku)}<span class="hn">${esc(hh.name||'')}${fin>=0?`<small>${fin+1}着</small>`:''}</span><span class="od">${od?od.toFixed(1):''}<small>${od?'倍':''}</small></span></li>`; }).join('')}</ul>
+      ${(p.bets||[]).length?`<div class="bets"><div class="bh"><span>買い目</span><span>金額</span></div>${p.bets.map((b,i)=>betRow(b,sb&&sb[i])).join('')}
+        <div class="tot"><span>合計</span><span class="num">${yen(p.bets.reduce((a,b)=>a+expand(b).length*b.unit,0))}<span class="muted" style="font-family:var(--sans);font-size:11px">　円</span></span></div></div>`:''}
+      ${p.comment?`<div class="cm">${esc(p.comment)}</div>`:''}
+      ${st?resBlock(r,st.cost,st.ret):resBlock(r,null,null)}
+      <div class="ft"><span>公開 ${hm(x.first_at)}</span>${x.updated_at&&x.updated_at!==x.first_at?`<span>更新 ${hm(x.updated_at)}</span>`:''}<span>${x.locked?'発走後のため確定':'発走まで更新されることがあります'}</span>${oddsAt(r)?`<span>オッズ ${oddsAt(r)}</span>`:''}</div>
+    </article>`; });
+  $('#pane').innerHTML=h;
+}
+
+ 
+function patOf(pid){ return (PUB.patterns||[]).find(p=>p.id===pid)||{}; }
+function paneSig(){
+  const date=UI.date, G=SEC['g:'+date]||{}, cands=G.cands||{}, dec=G.decided||{}, setl=G.settled||{}, PS=PUB.patterns||[], dm=CFG.decide_min||7;
+  const rk=k=>(cands[k]||dec[k]||{}).race||{};
+  const ids=[...new Set(Object.keys(cands).concat(Object.keys(dec)))].sort((a,b)=>(rk(a).time||'').localeCompare(rk(b).time||''));
+  let h=`<div class="mhd"><div class="sc">Pattern Signal</div><h2>${ph('パターン・|シグナル')}</h2><div class="m">${ph('検証を通った条件だけを|掲示します。')}</div></div>`;
+  h+=PS.map(P=>`<div class="intro"><b>${esc(P.code)}　${esc(P.name)}</b><br>${ph(P.desc||'')}<br>${ph('買い目は|'+(P.bets||''))}${ph('。|1単位＝'+yen(CFG.unit_yen)+'円')}</div>`).join('');
+  h+=`<div class="muted" style="text-align:center;margin-top:14px">${ph('判定は発走'+dm+'分前の|オッズで確定します。')}</div>`;
+  if(!ids.length) h+=`<div class="empty" style="margin-top:22px">${ph('この日は|条件に合う馬が|いません。')}</div>`;
+  ids.forEach(key=>{ const c=cands[key]||{}, d=dec[key], st=setl[key], base=c.race||(d&&d.race)||{}, r=raceOf(date,base.rid)||base, P=patOf(c.pid||(d&&d.pid));
+    const band=(d&&d.band)||c.band||[0,1e9], mins=minsTo(date,r.time), stt=d?d.status:'watch';
+    let pill='';
+    if(st&&st.status==='buy') pill=st.ret>0?`<span class="st hit">的中</span>`:`<span class="st">不的中</span>`;
+    else if(stt==='buy') pill=`<span class="st buy">確定　買い</span>`;
+    else if(stt==='pass') pill=`<span class="st">確定　見送り</span>`;
+    else if(stt==='none') pill=`<span class="st">判定なし</span>`;
+    else pill=`<span class="st watch"><span class="dot"></span>監視中</span>`;
+    pill=`<div style="display:flex;justify-content:space-between;align-items:center;gap:10px">${pill}<span class="muted en" style="letter-spacing:.16em;margin-top:14px">${esc(P.code||'')}</span></div>`;
+    const ord=(r.result&&r.result.order)||[];
+    const rows=((d&&d.cands)||c.cands||[]).map(hh=>{ const od=d?hh.odds:oddsOf(r,hh.uno), inb=od!=null&&od>=band[0]&&od<=band[1], fin=ord.indexOf(hh.uno);
+      return `<div class="cand ${d&&!hh.hit?'lost':''}">${cap(hh.uno,hh.waku)}<div class="hn">${esc(hh.name)}${fin>=0&&fin<3?`<small class="muted">　${fin+1}着</small>`:''}<span class="f">${(hh.facts||[]).map(esc).join('　')}</span></div>
+        <div class="o"><span class="num">${od?od.toFixed(1):'—'}</span><span class="b ${inb?'in':'out'}">${od==null?'取消':(d?'判定 ':'いま ')+(inb?'圏内':'圏外')}</span></div></div>`; }).join('');
+    let clock='';
+    if(!d&&mins!=null){ const left=mins-dm; clock=`<div class="clock">${IC.clock}<span>${left>0?`判定まで ${fmtLeft(left)}（${addMin(r.time,-dm)} 確定）`:'判定中…'}</span></div>`; }
+    else if(d&&d.status!=='none') clock=`<div class="clock">${IC.clock}<span>${hm(d.at)} 確定　発走${Math.round(d.mins)}分前・${esc(d.odds_at||'')}時点のオッズ</span></div>`;
+    else if(d) clock=`<div class="clock">${IC.clock}<span>${esc(d.why||'')}</span></div>`;
+    const bets=(st&&st.bets)||(d&&d.bets)||[], partners=(d&&d.partners)||[];
+    h+=`<article class="rc ${st&&st.ret>0?'hitc':''}">${rcHead(r,pill)}${clock}<div class="cands">${rows}</div>
+      ${bets.length?`<div class="bets"><div class="bh"><span>買い目${partners.length?`（ワイドの相手 ${partners.map(p=>p.uno).join('・')}）`:''}</span><span>金額</span></div>${bets.map(b=>betRow(b,st?b:null)).join('')}
+        <div class="tot"><span>合計</span><span class="num">${yen(bets.reduce((a,b)=>a+expand(b).length*b.unit,0))}<span class="muted" style="font-family:var(--sans);font-size:11px">　円</span></span></div></div>`:''}
+      ${st&&st.status==='buy'?resBlock(r,st.cost,st.ret):resBlock(r,null,null)}
+      ${!d&&oddsAt(r)?`<div class="ft"><span>オッズ ${oddsAt(r)} 時点</span></div>`:''}</article>`; });
+  $('#pane').innerHTML=h;
+}
+function minsTo(date,time){ const m=String(time||'').match(/(\d+):(\d+)/); if(!m) return null; const t=new Date(+date.slice(0,4),+date.slice(4,6)-1,+date.slice(6),+m[1],+m[2]); return (t-Date.now())/60000; }
+function fmtLeft(m){ if(m>=1440) return Math.floor(m/1440)+'日'; if(m>=60) return Math.floor(m/60)+'時間'+Math.floor(m%60)+'分'; return Math.ceil(m)+'分'; }
+function addMin(t,d){ const m=String(t||'').match(/(\d+):(\d+)/); if(!m) return ''; const x=+m[1]*60+ +m[2]+d; return String(Math.floor(x/60)).padStart(2,'0')+':'+String(x%60).padStart(2,'0'); }
+
+ 
+function paneRec(){
+  const ks=[]; if(SEC['r:sel']) ks.push(['sel','SELECTION']); if(SEC['r:sig']) ks.push(['sig','SIGNAL']);
+  if(!ks.some(k=>k[0]===UI.rk)) UI.rk=ks[0][0];
+  const R=SEC['r:'+UI.rk], s=R.sum||{}, days=R.days||{};
+  let h=`<div class="mhd"><div class="sc">Record</div><h2>${ph('すべての掲示の|成績')}</h2><div class="m">${s.first?`${fmtD(s.first)} — ${fmtD(s.last)}`:''}</div></div>`;
+  if(ks.length>1) h+=`<div class="seg">${ks.map(k=>`<button data-k="${k[0]}" class="${k[0]===UI.rk?'on':''}">${k[1]}</button>`).join('')}</div>`;
+  h+=`<div style="margin-top:24px">${kpi(s)}</div>`;
+  if(s.n){
+    h+=`<div class="kpis" style="border-top:0"><div><div class="v" style="font-size:24px">${yen(s.cost)}</div><div class="l">投資</div></div><div><div class="v" style="font-size:24px">${yen(s.ret)}</div><div class="l">払戻</div></div><div><div class="v" style="font-size:24px;${s.ret-s.cost>0?'color:var(--gold)':''}">${s.ret-s.cost>0?'+':''}${yen(s.ret-s.cost)}</div><div class="l">収支</div></div></div>`;
+    h+=`<table class="mtab" style="margin-top:30px"><tr><th>月</th><th>レース</th><th>投資</th><th>払戻</th><th>回収率</th></tr>${(s.months||[]).slice().reverse().map(m=>`<tr><td>${esc(m[0])}</td><td>${m[3]}</td><td>${yen(m[1])}</td><td>${yen(m[2])}</td><td>${pct(m[2],m[1])}%</td></tr>`).join('')}</table>`;
+    const items=[]; Object.keys(days).sort().reverse().forEach(d=>Object.entries(days[d]).forEach(([rid,x])=>items.push([d,rid,x])));
+    h+=`<div class="rlist" style="margin-top:30px">${items.map(([d,rid,x])=>{ const k=d+rid, pl=(x.ret||0)-(x.cost||0), r=x.race||{};
+      return `<div class="ritem"><button data-o="${k}"><span class="dt">${+d.slice(4,6)}.${+d.slice(6)}</span><span class="rn2">${esc(r.place)}${esc(r.R)}R　${esc(r.name||'')}</span><span class="pf ${pl>0?'pos':x.cost?'':'zero'}">${x.cost?(pl>0?'+':'')+yen(pl):'見送り'}</span></button>
+        ${UI.open[k]?`<div class="dx">${(x.bets||[]).map(b=>betRow(b,b)).join('')}</div>`:''}</div>`; }).join('')}</div>`;
+  }
+  if(UI.rk==='sig') h+=(PUB.patterns||[]).map(btBox).join('');
+  $('#pane').innerHTML=h;
+  $$('.seg button').forEach(b=>b.onclick=()=>{ UI.rk=b.dataset.k; members(); });
+  $$('.ritem>button').forEach(b=>b.onclick=()=>{ UI.open[b.dataset.o]=!UI.open[b.dataset.o]; paneRec(); });
+}
+
+ 
+const LIVE={};
+function nkOdds(rid,act){ return new Promise(res=>{ const cb='nk'+Date.now()+Math.floor(Math.random()*1e6), sc=document.createElement('script'); let done=false;
+  const fin=v=>{ if(done) return; done=true; try{ delete window[cb]; }catch(e){ window[cb]=undefined; } sc.remove(); res(v); };
+  window[cb]=j=>fin(j); sc.onerror=()=>fin(null); setTimeout(()=>fin(null),8000);
+  sc.src='https://race.netkeiba.com/api/api_get_jra_odds.html?race_id='+rid+'&type=1'+(act?'&action='+act:'')+'&output=jsonp&callback='+cb+'&_='+Date.now(); document.head.appendChild(sc); }); }
+async function fetchLive(rid){ for(const act of ['update','init']){ const j=await nkOdds(rid,act); if(j===null) return null;
+  const d=j&&j.data&&j.data.odds&&j.data.odds['1']; if(d&&Object.keys(d).length){ const m={}; Object.keys(d).forEach(k=>{ const v=parseFloat(String(Array.isArray(d[k])?d[k][0]:d[k]).replace(/,/g,'')); m[+k]=v>0?v:null; });
+    const at=String(j.data.official_datetime||'').match(/(\d\d:\d\d)/); return {m,at:at?at[1]:new Date().toTimeString().slice(0,5)}; } } return null; }
+let liveBusy=false;
+async function liveOdds(){
+  if(liveBusy||!ME||UI.tab==='rec') return; const date=UI.date; if(date!==todayKey()) return;
+  const rids=new Set(); const S=SEC['s:'+date], G=SEC['g:'+date];
+  if(UI.tab==='sel'&&S) Object.keys(S.picks||{}).forEach(r=>rids.add(r));
+  if(UI.tab==='sig'&&G) Object.entries(G.cands||{}).forEach(([k,c])=>{ if(!(G.decided||{})[k]) rids.add(c.race.rid); });
+  const tgt=[...rids].filter(rid=>{ const r=raceOf(date,rid); const m=r&&minsTo(date,r.time); return m!=null&&m<=60&&m>=-2&&!(LIVE[rid]&&Date.now()-LIVE[rid].t<55000); });
+  if(!tgt.length) return; liveBusy=true;
+  for(const rid of tgt){ const o=await fetchLive(rid); if(o) LIVE[rid]=Object.assign(o,{t:Date.now()}); }
+  liveBusy=false; if(ME&&location.hash==='#members') ({sel:paneSel,sig:paneSig})[UI.tab]&&({sel:paneSel,sig:paneSig})[UI.tab]();
+}
+
+ 
+async function loadAll(){ const [p,e]=await Promise.all([getJSON('pub.json'),getJSON('enc.json')]); if(p) PUB=p; if(e) ENC=e; }
+async function route(){
+  const h=location.hash;
+  if(h==='#legal') return legal();
+  if(h==='#terms') return terms();
+  if(h==='#privacy') return privacy();
+  if(h==='#members'){ if(!ME){ const k=ls.get('ecr_k'); if(k) await openWith(k); } if(ME){ closeKey(); members(); scrollTo(0,0); } else { landing(); askKey(); } return; }
+  closeKey(); landing(); if(h&&h!=='#top'){ const el=document.querySelector(h); if(el) el.scrollIntoView(); } else scrollTo(0,0);
+}
+window.addEventListener('hashchange',route);
+(async()=>{
+  if(CFG.sample){ const s=document.createElement('div'); s.className='sample'; s.textContent='見本データ — 実際の成績ではありません'; document.body.appendChild(s); }
+  await loadAll(); route();
+  setInterval(async()=>{  
+    if(location.hash!=='#members'||!ME) return; const gen=PUB&&PUB.gen; await loadAll();
+    if(PUB&&PUB.gen!==gen&&MKEY){ const y=scrollY; if(await openWith(MKEY)){ members(); scrollTo(0,y); } }
+    else liveOdds(); },60000);
+  setInterval(()=>{ if(location.hash==='#members'&&ME&&UI.tab==='sig'){ const y=scrollY; paneSig(); scrollTo(0,y); } },20000);
+})();
+</script>
+</body>
+</html>
