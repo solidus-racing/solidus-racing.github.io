@@ -125,6 +125,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .empty{text-align:center;color:var(--ink2);font-size:14px;padding:30px 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
 
 .plans{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.plans.one{grid-template-columns:minmax(0,440px);justify-content:center}
 .plan{border:1px solid var(--rule);background:var(--card);padding:38px 28px 34px;display:flex;flex-direction:column;text-align:center}
 .plan.top3{border-color:var(--gold2);background:#1A1712;position:relative}
 .plan.top3::before{content:"";position:absolute;inset:5px;border:1px solid var(--rule2);pointer-events:none}
@@ -327,7 +328,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   </div>
 </div>
 <script>
-const CFG={"brand": "SOLIDUS", "brand_sub": "PRIVATE RACING OFFICE", "brand_kana": "ソリドゥス", "tagline": "一鞍を、|選び抜く。", "lead": "完全招待制・定員制の、|競馬のための私設室。", "contact_url": "", "contact_label": "入会のご相談", "selector_name": "S.", "selector_title": "セレクター", "plans": [{"id": "selection", "name": "SELECTION", "jp": "セレクション", "price": 100000, "seats": 20, "items": ["スペシャル・セレクション|（印・買い目・見解）", "全成績の閲覧"]}, {"id": "signal", "name": "SIGNAL", "jp": "シグナル", "price": 100000, "seats": 20, "items": ["パターン・シグナル|（締切直前の自動判定）", "全成績の閲覧"]}, {"id": "prive", "name": "PRIVÉ", "jp": "プリヴェ", "price": 300000, "seats": 5, "items": ["セレクションと|シグナルのすべて", "セレクターへの|個別のご質問", "開催日の直通連絡"]}], "legal": {"seller": "", "manager": "", "address": "", "tel": "", "email": "", "price_note": "各プランに表示（税込）。note の販売ページの価格が正です", "extra_fee": "インターネット接続料金・通信料金はお客様のご負担となります。", "payment": "note（ノート株式会社）の決済方法による（クレジットカードほか）", "timing": "ご購入後すぐ、note の購入者向けページでパスをお知らせします。パスはご購入月の末日まで有効です。", "cancel": "デジタルコンテンツの性質上、パスをお知らせした後の返金はいたしかねます。自動更新はありません。翌月もご利用の場合は、翌月分をお買い求めください。"}, "launch_date": "", "decide_min": 7, "note_url": "", "note_label": "ご入会（note）", "unit_yen": 10000, "gas_url": "https://script.google.com/macros/s/AKfycbxLug_OUAQARMTg4WlL2XYXhqRvF9pxTZ2d5S_TUHVIfdIGYPyNJZg1Jc1ZJYKeZcroVQ/exec", "site_url": "https://solidus-racing.github.io/"};
+const CFG={"brand": "SOLIDUS", "brand_sub": "PRIVATE RACING OFFICE", "brand_kana": "ソリドゥス", "tagline": "一鞍を、|選び抜く。", "lead": "完全招待制・定員制の、|競馬のための私設室。", "contact_url": "", "contact_label": "入会のご相談", "selector_name": "S.", "selector_title": "セレクター", "plans": [{"id": "prive", "name": "MEMBERSHIP", "jp": "メンバーシップ", "price": 50000, "seats": 20, "items": ["スペシャル・セレクション|（印・買い目・見解）", "パターン・シグナル|（締切直前の自動判定）", "すべての掲示の|成績"]}], "legal": {"seller": "", "manager": "", "address": "", "tel": "", "email": "", "price_note": "税込50,000円（1か月）。Bookers の販売ページの価格が正です", "extra_fee": "インターネット接続料金・通信料金はお客様のご負担となります。", "payment": "Bookers の決済方法による", "timing": "ご購入後すぐ、Bookers の購入者向けページでパスをお知らせします。パスはご購入月の末日まで有効です。", "cancel": "デジタルコンテンツの性質上、パスをお知らせした後の返金はいたしかねます。自動更新はありません。翌月もご利用の場合は、翌月分をお買い求めください。"}, "launch_date": "", "decide_min": 7, "note_url": "", "note_label": "ご入会（Bookers）", "unit_yen": 10000, "gas_url": "https://script.google.com/macros/s/AKfycbxLug_OUAQARMTg4WlL2XYXhqRvF9pxTZ2d5S_TUHVIfdIGYPyNJZg1Jc1ZJYKeZcroVQ/exec", "site_url": "https://solidus-racing.github.io/"};
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const ph=s=>String(s||'').split('|').map(x=>`<span class="ph">${esc(x)}</span>`).join('');
@@ -432,7 +433,7 @@ function landing(){
 
   <section class="sec" id="plans"><div class="wrap">
     <div class="hd fade"><div class="sc">IV.&nbsp; Membership</div><h2>${ph('会員制度')}</h2><p>${ph('席数を限って|ご案内しています。')}</p></div>
-    <div class="plans">${plans}</div>
+    <div class="plans ${(CFG.plans||[]).length===1?'one':''}">${plans}</div>
   </div></section>
 
   <section class="sec"><div class="wrap adm fade">
