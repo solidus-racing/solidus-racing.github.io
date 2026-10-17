@@ -50,6 +50,11 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 
 
 .hero{min-height:calc(100svh - 56px);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:64px 24px 72px;position:relative}
+.hero .bg{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+.hero .bg img{position:absolute;left:57%;top:40%;width:min(165vw,960px);max-width:none;transform:translate(-50%,-50%);opacity:var(--hero-op,.16);
+  filter:grayscale(1) contrast(1.08) brightness(.9);mix-blend-mode:screen;
+  -webkit-mask-image:radial-gradient(ellipse 48% 52% at 50% 50%,#000 30%,transparent 72%);mask-image:radial-gradient(ellipse 48% 52% at 50% 50%,#000 30%,transparent 72%)}
+.hero>*:not(.bg){position:relative;z-index:1}
 .hero .crest{width:62px;height:62px;border:1px solid var(--gold);border-radius:50%;box-shadow:inset 0 0 0 4px var(--paper),inset 0 0 0 5px var(--gold2);display:flex;align-items:center;justify-content:center;font-family:var(--en);font-size:30px;font-weight:400;color:var(--gold);margin-bottom:26px;padding-top:2px}
 .hero h1{font-family:var(--en);font-weight:400;font-size:clamp(50px,13vw,104px);letter-spacing:.16em;padding-left:.16em;line-height:1}
 .hero .sub{margin-top:16px}
@@ -309,7 +314,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   </div>
 </div>
 <script>
-const CFG={"brand": "SOLIDUS", "brand_sub": "PRIVATE RACING OFFICE", "brand_kana": "ソリドゥス", "tagline": "一鞍を、|選び抜く。", "lead": "選び抜いた一鞍と、|検証を通った条件だけ。", "contact_url": "", "contact_label": "入会のご相談", "selector_name": "S.", "selector_title": "セレクター", "plans": [{"id": "prive", "name": "MEMBERSHIP", "jp": "メンバーシップ", "price": 50000, "items": ["スペシャル・セレクション|（印・買い目）", "パターン・シグナル|（締切直前の自動判定）", "すべての掲示の|成績"]}], "legal": {"seller": "", "manager": "", "address": "請求があれば遅滞なく開示します", "tel": "請求があれば遅滞なく開示します（お問い合わせはメールにて）", "email": "", "price_note": "月額 50,000円（税込）。Bookers のメンバーシップの価格が正です", "extra_fee": "インターネット接続料金・通信料金はお客様のご負担となります。", "payment": "Bookers または note の決済方法による（クレジットカードほか）", "timing": "ご入会後すぐ、会員限定の投稿でパスをお知らせします。パスは毎週切り替わり、新しいパスも同じ場所でお知らせします。", "cancel": "メンバーシップは毎月自動で更新されます。解約はご入会先（Bookers または note）のメンバーシップ管理から行えます。お支払い済みの月の返金はいたしかねます。"}, "launch_date": "20261018", "decide_min": 7, "note_url": "https://note.com/solidus_horse", "note_label": "ご入会（note）", "bookers_url": "https://bookers.tech/author/579198/", "sel_deadline_min": 30, "line_url": "https://line.me/R/ti/p/@554lmipt", "legal_page": false, "unit_yen": 10000, "gas_url": "https://script.google.com/macros/s/AKfycbxLug_OUAQARMTg4WlL2XYXhqRvF9pxTZ2d5S_TUHVIfdIGYPyNJZg1Jc1ZJYKeZcroVQ/exec", "site_url": "https://solidus-racing.github.io/"};
+const CFG={"brand": "SOLIDUS", "brand_sub": "PRIVATE RACING OFFICE", "brand_kana": "ソリドゥス", "tagline": "一鞍を、|選び抜く。", "lead": "選び抜いた一鞍と、|検証を通った条件だけ。", "contact_url": "", "contact_label": "入会のご相談", "selector_name": "S.", "selector_title": "セレクター", "plans": [{"id": "prive", "name": "MEMBERSHIP", "jp": "メンバーシップ", "price": 50000, "items": ["スペシャル・セレクション|（印・買い目）", "パターン・シグナル|（締切直前の自動判定）", "すべての掲示の|成績"]}], "legal": {"seller": "", "manager": "", "address": "請求があれば遅滞なく開示します", "tel": "請求があれば遅滞なく開示します（お問い合わせはメールにて）", "email": "", "price_note": "月額 50,000円（税込）。Bookers のメンバーシップの価格が正です", "extra_fee": "インターネット接続料金・通信料金はお客様のご負担となります。", "payment": "Bookers または note の決済方法による（クレジットカードほか）", "timing": "ご入会後すぐ、会員限定の投稿でパスをお知らせします。パスは毎週切り替わり、新しいパスも同じ場所でお知らせします。", "cancel": "メンバーシップは毎月自動で更新されます。解約はご入会先（Bookers または note）のメンバーシップ管理から行えます。お支払い済みの月の返金はいたしかねます。"}, "launch_date": "20261018", "decide_min": 7, "note_url": "https://note.com/solidus_horse", "note_label": "ご入会（note）", "bookers_url": "https://bookers.tech/author/579198/", "sel_deadline_min": 30, "line_url": "https://line.me/R/ti/p/@554lmipt", "legal_page": false, "hero_image": "hero.jpg", "hero_opacity": 0.16, "unit_yen": 10000, "gas_url": "https://script.google.com/macros/s/AKfycbxLug_OUAQARMTg4WlL2XYXhqRvF9pxTZ2d5S_TUHVIfdIGYPyNJZg1Jc1ZJYKeZcroVQ/exec", "site_url": "https://solidus-racing.github.io/"};
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const ph=s=>String(s||'').split('|').map(x=>`<span class="ph">${esc(x)}</span>`).join('');
@@ -371,7 +376,8 @@ function landing(){
       +(CFG.note_url?`<a class="btn solid" href="${esc(CFG.note_url)}" target="_blank" rel="noopener">${esc(CFG.note_label||'ご入会（note）')}</a>`:'')
       ||`<span class="btn solid" style="opacity:.45;cursor:default">ご入会は準備中です</span>`;
   $('#app').innerHTML=`
-  <section class="hero">
+  <section class="hero"${CFG.hero_image?` style="--hero-op:${+CFG.hero_opacity||.16}"`:''}>
+    ${CFG.hero_image?`<div class="bg"><img src="${esc(CFG.hero_image)}" alt="" decoding="async" fetchpriority="high"></div>`:''}
     <div class="crest">${esc(String(CFG.brand||"").charAt(0))}</div>
     <div class="sc">${esc(CFG.brand_sub)}</div>
     <h1 style="margin-top:22px">${esc(CFG.brand)}</h1>
