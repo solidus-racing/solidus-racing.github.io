@@ -94,7 +94,7 @@ textarea{min-height:130px;font-family:var(--jp);line-height:1.9}
 <header class="top"><div class="in"><div class="wm">SOLIDUS<small>SELECTOR</small></div><div class="who" id="who"></div></div></header>
 <div id="app"></div>
 <script>
-const CFG={"brand": "SOLIDUS", "brand_sub": "PRIVATE RACING OFFICE", "brand_kana": "ソリドゥス", "tagline": "一鞍を、|選び抜く。", "lead": "選び抜いた一鞍と、|検証を通った条件だけ。", "contact_url": "", "contact_label": "入会のご相談", "selector_name": "S.", "selector_title": "セレクター", "plans": [{"id": "prive", "name": "MEMBERSHIP", "jp": "メンバーシップ", "price": 50000, "items": ["スペシャル・セレクション|（印・買い目）", "パターン・シグナル|（締切直前の自動判定）", "すべての掲示の|成績"]}], "legal": {"seller": "", "manager": "", "address": "", "tel": "", "email": "", "price_note": "月額 50,000円（税込）。Bookers のメンバーシップの価格が正です", "extra_fee": "インターネット接続料金・通信料金はお客様のご負担となります。", "payment": "Bookers の決済方法による（クレジットカード・キャリア決済ほか）", "timing": "ご入会後すぐ、Bookers のメンバーシップ限定記事でパスをお知らせします。パスは毎月切り替わり、新しいパスも同じ記事でお知らせします。", "cancel": "Bookers のメンバーシップは毎月自動で更新されます。解約は Bookers のメンバーシップ管理から行えます。お支払い済みの月の返金はいたしかねます。"}, "launch_date": "", "decide_min": 7, "note_url": "", "note_label": "ご入会（Bookers）", "unit_yen": 10000, "gas_url": "https://script.google.com/macros/s/AKfycbxLug_OUAQARMTg4WlL2XYXhqRvF9pxTZ2d5S_TUHVIfdIGYPyNJZg1Jc1ZJYKeZcroVQ/exec", "site_url": "https://solidus-racing.github.io/"};
+const CFG={"brand": "SOLIDUS", "brand_sub": "PRIVATE RACING OFFICE", "brand_kana": "ソリドゥス", "tagline": "一鞍を、|選び抜く。", "lead": "選び抜いた一鞍と、|検証を通った条件だけ。", "contact_url": "", "contact_label": "入会のご相談", "selector_name": "S.", "selector_title": "セレクター", "plans": [{"id": "prive", "name": "MEMBERSHIP", "jp": "メンバーシップ", "price": 50000, "items": ["スペシャル・セレクション|（印・買い目）", "パターン・シグナル|（締切直前の自動判定）", "すべての掲示の|成績"]}], "legal": {"seller": "", "manager": "", "address": "", "tel": "", "email": "", "price_note": "月額 50,000円（税込）。Bookers のメンバーシップの価格が正です", "extra_fee": "インターネット接続料金・通信料金はお客様のご負担となります。", "payment": "Bookers の決済方法による（クレジットカード・キャリア決済ほか）", "timing": "ご入会後すぐ、Bookers のメンバーシップ限定記事でパスをお知らせします。パスは毎月切り替わり、新しいパスも同じ記事でお知らせします。", "cancel": "Bookers のメンバーシップは毎月自動で更新されます。解約は Bookers のメンバーシップ管理から行えます。お支払い済みの月の返金はいたしかねます。"}, "launch_date": "", "decide_min": 7, "note_url": "", "note_label": "ご入会（Bookers）", "sel_deadline_min": 30, "unit_yen": 10000, "gas_url": "https://script.google.com/macros/s/AKfycbxLug_OUAQARMTg4WlL2XYXhqRvF9pxTZ2d5S_TUHVIfdIGYPyNJZg1Jc1ZJYKeZcroVQ/exec", "site_url": "https://solidus-racing.github.io/"};
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const ph=s=>String(s||'').split('|').map(x=>`<span class="ph">${esc(x)}</span>`).join('');
@@ -148,7 +148,7 @@ function todayKey(){ const t=new Date(); return t.getFullYear()+String(t.getMont
 function days(){ return Object.keys(SEC).filter(s=>s.startsWith('d:')).map(s=>s.slice(2)).sort().filter(d=>PREVIEW||CFG.sample||d>=todayKey()); }
 function race(rid){ const d=SEC['d:'+UI.date]; return d&&(d.races||[]).find(r=>r.rid===rid); }
 function minsTo(r){ const m=String(r.time||'').match(/(\d+):(\d+)/); if(!m) return null; const d=UI.date, t=new Date(+d.slice(0,4),+d.slice(4,6)-1,+d.slice(6),+m[1],+m[2]); return (t-Date.now())/60000; }
-function locked(r){ if(CFG.sample) return false; const m=minsTo(r); return m!=null&&m<=0; }
+function locked(r){ if(CFG.sample) return false; const m=minsTo(r); return m!=null&&m<=(CFG.sel_deadline_min||0); }
 
 function gate(msg){
   $('#who').textContent='';
@@ -166,7 +166,7 @@ function listView(){
   UI.rid=null; const d=SEC['d:'+UI.date]||{};
   const ds=days().map(x=>{ const t=new Date(+x.slice(0,4),+x.slice(4,6)-1,+x.slice(6)); return `<button data-d="${x}" class="${x===UI.date?'on':''}"><span class="d">${t.getMonth()+1}.${t.getDate()}</span><span class="w2">${'SUN MON TUE WED THU FRI SAT'.split(' ')[t.getDay()]}</span></button>`; }).join('');
   $('#app').innerHTML=`<div class="wrap"><nav class="dates">${ds}</nav>
-    <div class="note" style="text-align:center;margin-top:14px">${ph('選定したレースは、|保存すると数分で|会員ページに出ます。|発走後は変更できません。')}</div>
+    <div class="note" style="text-align:center;margin-top:14px">${ph('選定したレースは、|保存すると数分で|会員ページに出ます。|締め切りは|発走'+(CFG.sel_deadline_min||0)+'分前です。')}</div>
     <div class="list">${(d.races||[]).filter(r=>(r.runners||[]).length).map(r=>{ const p=UI.picks[r.rid], lk=locked(r);
       return `<button class="li" data-r="${r.rid}"><span class="t">${esc(r.time)}</span><span class="n">${esc(r.place)}${esc(r.R)}R　${esc(r.name)}<small>${esc(r.surface||'')}${esc(r.dist||'')}m　${(r.runners||[]).length}頭</small></span>
         <span class="s ${p?'on':''} ${lk&&!p?'lk':''}">${p?'選定済み':lk?'締切':'—'}</span></button>`; }).join('')}</div></div>`;
@@ -194,7 +194,7 @@ function render(){
   const total=D.bets.reduce((a,b)=>a+expand(b).length*b.unit,0);
   $('#app').innerHTML=`<div class="wrap ed"><button class="back" id="bk">← レース一覧</button>
     <div class="rh"><div class="k">${esc(r.place)}<b>${esc(r.R)}R</b>　<span style="font-family:var(--en);font-size:18px;color:var(--ink2)">${esc(r.time)}</span></div><div class="nm">${esc(r.name)}</div><div class="m">${esc(r.surface||'')}${esc(r.dist||'')}m　${hs.length}頭</div></div>
-    ${lk?`<div class="lock">${ph('発走時刻を過ぎたため、|変更できません。')}</div>`:''}
+    ${lk?`<div class="lock">${ph('締め切り（発走'+(CFG.sel_deadline_min||0)+'分前）を|過ぎたため、|変更できません。')}</div>`:''}
     <h3><span>印</span><span>${Object.keys(D.marks).length}頭</span></h3>
     ${hs.map(h=>`<div class="hr">${cap(h.uno,h.waku)}<div class="nm"><span>${esc(h.name)}</span><small>${h.odds?h.odds.toFixed(1):''}</small></div>
       <div class="mks">${MARKS.map(m=>`<button data-u="${h.uno}" data-m="${m}" class="${D.marks[h.uno]===m?'on':''}">${m}</button>`).join('')}</div></div>`).join('')}

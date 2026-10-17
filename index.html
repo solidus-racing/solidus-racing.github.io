@@ -328,7 +328,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   </div>
 </div>
 <script>
-const CFG={"brand": "SOLIDUS", "brand_sub": "PRIVATE RACING OFFICE", "brand_kana": "ソリドゥス", "tagline": "一鞍を、|選び抜く。", "lead": "選び抜いた一鞍と、|検証を通った条件だけ。", "contact_url": "", "contact_label": "入会のご相談", "selector_name": "S.", "selector_title": "セレクター", "plans": [{"id": "prive", "name": "MEMBERSHIP", "jp": "メンバーシップ", "price": 50000, "items": ["スペシャル・セレクション|（印・買い目）", "パターン・シグナル|（締切直前の自動判定）", "すべての掲示の|成績"]}], "legal": {"seller": "", "manager": "", "address": "", "tel": "", "email": "", "price_note": "月額 50,000円（税込）。Bookers のメンバーシップの価格が正です", "extra_fee": "インターネット接続料金・通信料金はお客様のご負担となります。", "payment": "Bookers の決済方法による（クレジットカード・キャリア決済ほか）", "timing": "ご入会後すぐ、Bookers のメンバーシップ限定記事でパスをお知らせします。パスは毎月切り替わり、新しいパスも同じ記事でお知らせします。", "cancel": "Bookers のメンバーシップは毎月自動で更新されます。解約は Bookers のメンバーシップ管理から行えます。お支払い済みの月の返金はいたしかねます。"}, "launch_date": "", "decide_min": 7, "note_url": "", "note_label": "ご入会（Bookers）", "unit_yen": 10000, "gas_url": "https://script.google.com/macros/s/AKfycbxLug_OUAQARMTg4WlL2XYXhqRvF9pxTZ2d5S_TUHVIfdIGYPyNJZg1Jc1ZJYKeZcroVQ/exec", "site_url": "https://solidus-racing.github.io/"};
+const CFG={"brand": "SOLIDUS", "brand_sub": "PRIVATE RACING OFFICE", "brand_kana": "ソリドゥス", "tagline": "一鞍を、|選び抜く。", "lead": "選び抜いた一鞍と、|検証を通った条件だけ。", "contact_url": "", "contact_label": "入会のご相談", "selector_name": "S.", "selector_title": "セレクター", "plans": [{"id": "prive", "name": "MEMBERSHIP", "jp": "メンバーシップ", "price": 50000, "items": ["スペシャル・セレクション|（印・買い目）", "パターン・シグナル|（締切直前の自動判定）", "すべての掲示の|成績"]}], "legal": {"seller": "", "manager": "", "address": "", "tel": "", "email": "", "price_note": "月額 50,000円（税込）。Bookers のメンバーシップの価格が正です", "extra_fee": "インターネット接続料金・通信料金はお客様のご負担となります。", "payment": "Bookers の決済方法による（クレジットカード・キャリア決済ほか）", "timing": "ご入会後すぐ、Bookers のメンバーシップ限定記事でパスをお知らせします。パスは毎月切り替わり、新しいパスも同じ記事でお知らせします。", "cancel": "Bookers のメンバーシップは毎月自動で更新されます。解約は Bookers のメンバーシップ管理から行えます。お支払い済みの月の返金はいたしかねます。"}, "launch_date": "", "decide_min": 7, "note_url": "", "note_label": "ご入会（Bookers）", "sel_deadline_min": 30, "unit_yen": 10000, "gas_url": "https://script.google.com/macros/s/AKfycbxLug_OUAQARMTg4WlL2XYXhqRvF9pxTZ2d5S_TUHVIfdIGYPyNJZg1Jc1ZJYKeZcroVQ/exec", "site_url": "https://solidus-racing.github.io/"};
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const ph=s=>String(s||'').split('|').map(x=>`<span class="ph">${esc(x)}</span>`).join('');
@@ -406,7 +406,7 @@ function landing(){
       <div>
         <div class="no">01</div><h3>SPECIAL SELECTION</h3><div class="jt">スペシャル・セレクション</div>
         <p>${ph(esc(CFG.selector_title)+'が、|その週に勝負すべき|レースだけを選び、|印と買い目を|掲示します。')}</p>
-        <ul><li><span class="t">${ph('券種・点数・金額まで|そのまま')}</span></li><li><span class="t">${ph('ときには|見解も添えて')}</span></li><li><span class="t">${ph('発走後の変更は|いたしません')}</span></li></ul>
+        <ul><li><span class="t">${ph('券種・点数・金額まで|そのまま')}</span></li><li><span class="t">${ph('ときには|見解も添えて')}</span></li><li><span class="t">${ph('発走'+(CFG.sel_deadline_min||30)+'分前に|確定します')}</span></li></ul>
       </div>
       <div>
         <div class="no">02</div><h3>PATTERN SIGNAL</h3><div class="jt">パターン・シグナル</div>
@@ -481,7 +481,7 @@ function terms(){
   topbar('pub'); const dm=CFG.decide_min||7;
   const t=['当サービスが提供する情報は、競馬の予想に関する参考情報です。的中や利益を約束・保証するものではありません。',
     '馬券の購入はご自身の判断と責任で行ってください。馬券は20歳以上の方のみ購入できます。',
-    '掲示する成績は、掲示したすべてのレースを含みます。シグナルは発走'+dm+'分前のオッズで判定を確定し、セレクションは発走後に変更しません。',
+    '掲示する成績は、掲示したすべてのレースを含みます。シグナルは発走'+dm+'分前のオッズで判定を確定し、セレクションは発走'+(CFG.sel_deadline_min||30)+'分前に確定し、以後は変更しません。',
     '同じレースの選定・判定は、どのプランでも同じ内容です。プランによって買い目を変えることはありません。',
     '「ローンチ前の検証」は過去のデータによる集計で、運用の成績ではありません。過去の成績は将来の成績を保証しません。',
     'オッズ・出走取消・結果などの正式な情報は、JRAの発表をご確認ください。表示の遅れや誤りにより損害が生じた場合、当サービスの故意または重大な過失によるときを除き、当サービスが受け取った当月の利用料金を上限として責任を負います。',
@@ -617,7 +617,7 @@ function paneSel(){
         <div class="tot"><span>合計</span><span class="num">${yen(p.bets.reduce((a,b)=>a+expand(b).length*b.unit,0))}<span class="muted" style="font-family:var(--sans);font-size:11px">　円</span></span></div></div>`:''}
       ${p.comment?`<div class="cm">${esc(p.comment)}</div>`:''}
       ${st?resBlock(r,st.cost,st.ret):resBlock(r,null,null)}
-      <div class="ft"><span>公開 ${hm(x.first_at)}</span>${x.updated_at&&x.updated_at!==x.first_at?`<span>更新 ${hm(x.updated_at)}</span>`:''}<span>${x.locked?'発走後のため確定':'発走まで更新されることがあります'}</span>${oddsAt(r)?`<span>オッズ ${oddsAt(r)}</span>`:''}</div>
+      <div class="ft"><span>公開 ${hm(x.first_at)}</span>${x.updated_at&&x.updated_at!==x.first_at?`<span>更新 ${hm(x.updated_at)}</span>`:''}<span>${x.locked?'確定':'発走'+(CFG.sel_deadline_min||0)+'分前まで更新されることがあります'}</span>${oddsAt(r)?`<span>オッズ ${oddsAt(r)}</span>`:''}</div>
     </article>`; });
   $('#pane').innerHTML=h;
 }
