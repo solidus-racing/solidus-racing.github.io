@@ -474,6 +474,15 @@ function terms(){
     <ol>${t.map(x=>`<li>${esc(x)}</li>`).join('')}</ol><a class="back" href="#top">${IC.back}<span>BACK</span></a></div></section>${footer()}`; scrollTo(0,0); }
 
 function planName(id){ const p=(CFG.plans||[]).find(x=>x.id===id); return p?p.name:String(id||'').toUpperCase(); }
+function privacy(){
+  topbar('pub');
+  const t=['当サイトは、お名前・ご連絡先などの個人情報を集めません。',
+    'ご入会とお支払いは Bookers または note で行われ、その情報は各サービスの定めに従って取り扱われます。当サービスがカード情報などを受け取ることはありません。',
+    'お問い合わせでいただいた情報は、回答のためだけに使い、法令に基づく場合を除き第三者に提供しません。',
+    '会員ページは、ご自身の端末に会員パスと表示の設定だけを保存します（ブラウザの保存領域）。'];
+  $('#app').innerHTML=`<section class="legal"><div class="narrow"><div class="sc" style="text-align:center">Privacy</div><h2>${ph('プライバシー|ポリシー')}</h2>
+    <ol>${t.map(x=>`<li>${esc(x)}</li>`).join('')}</ol><a class="back" href="#top">${IC.back}<span>BACK</span></a></div></section>${footer()}`; scrollTo(0,0); }
+
  
 function askKey(){ $('#sheet').classList.add('on'); $('#kerr').textContent=''; setTimeout(()=>$('#kin').focus(),250); }
 function closeKey(){ $('#sheet').classList.remove('on'); }
