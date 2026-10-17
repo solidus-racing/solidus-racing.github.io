@@ -309,7 +309,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   </div>
 </div>
 <script>
-const CFG={"brand": "SOLIDUS", "brand_sub": "PRIVATE RACING OFFICE", "brand_kana": "ソリドゥス", "tagline": "一鞍を、|選び抜く。", "lead": "選び抜いた一鞍と、|検証を通った条件だけ。", "contact_url": "", "contact_label": "入会のご相談", "selector_name": "S.", "selector_title": "セレクター", "plans": [{"id": "prive", "name": "MEMBERSHIP", "jp": "メンバーシップ", "price": 50000, "items": ["スペシャル・セレクション|（印・買い目）", "パターン・シグナル|（締切直前の自動判定）", "すべての掲示の|成績"]}], "legal": {"seller": "", "manager": "", "address": "請求があれば遅滞なく開示します", "tel": "請求があれば遅滞なく開示します（お問い合わせはメールにて）", "email": "", "price_note": "月額 50,000円（税込）。Bookers のメンバーシップの価格が正です", "extra_fee": "インターネット接続料金・通信料金はお客様のご負担となります。", "payment": "Bookers の決済方法による（クレジットカード・キャリア決済ほか）", "timing": "ご入会後すぐ、Bookers のメンバーシップ限定の掲示板でパスをお知らせします。パスは毎週切り替わり、新しいパスも同じ掲示板でお知らせします。", "cancel": "Bookers のメンバーシップは毎月自動で更新されます。解約は Bookers のメンバーシップ管理から行えます。お支払い済みの月の返金はいたしかねます。"}, "launch_date": "20261018", "decide_min": 7, "note_url": "", "note_label": "ご入会（Bookers）", "sel_deadline_min": 30, "line_url": "https://line.me/R/ti/p/@554lmipt", "legal_page": false, "unit_yen": 10000, "gas_url": "https://script.google.com/macros/s/AKfycbxLug_OUAQARMTg4WlL2XYXhqRvF9pxTZ2d5S_TUHVIfdIGYPyNJZg1Jc1ZJYKeZcroVQ/exec", "site_url": "https://solidus-racing.github.io/"};
+const CFG={"brand": "SOLIDUS", "brand_sub": "PRIVATE RACING OFFICE", "brand_kana": "ソリドゥス", "tagline": "一鞍を、|選び抜く。", "lead": "選び抜いた一鞍と、|検証を通った条件だけ。", "contact_url": "", "contact_label": "入会のご相談", "selector_name": "S.", "selector_title": "セレクター", "plans": [{"id": "prive", "name": "MEMBERSHIP", "jp": "メンバーシップ", "price": 50000, "items": ["スペシャル・セレクション|（印・買い目）", "パターン・シグナル|（締切直前の自動判定）", "すべての掲示の|成績"]}], "legal": {"seller": "", "manager": "", "address": "請求があれば遅滞なく開示します", "tel": "請求があれば遅滞なく開示します（お問い合わせはメールにて）", "email": "", "price_note": "月額 50,000円（税込）。Bookers のメンバーシップの価格が正です", "extra_fee": "インターネット接続料金・通信料金はお客様のご負担となります。", "payment": "Bookers または note の決済方法による（クレジットカードほか）", "timing": "ご入会後すぐ、会員限定の投稿でパスをお知らせします。パスは毎週切り替わり、新しいパスも同じ場所でお知らせします。", "cancel": "メンバーシップは毎月自動で更新されます。解約はご入会先（Bookers または note）のメンバーシップ管理から行えます。お支払い済みの月の返金はいたしかねます。"}, "launch_date": "20261018", "decide_min": 7, "note_url": "https://note.com/solidus_horse", "note_label": "ご入会（note）", "bookers_url": "https://bookers.tech/author/579198/", "sel_deadline_min": 30, "line_url": "https://line.me/R/ti/p/@554lmipt", "legal_page": false, "unit_yen": 10000, "gas_url": "https://script.google.com/macros/s/AKfycbxLug_OUAQARMTg4WlL2XYXhqRvF9pxTZ2d5S_TUHVIfdIGYPyNJZg1Jc1ZJYKeZcroVQ/exec", "site_url": "https://solidus-racing.github.io/"};
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const ph=s=>String(s||'').split('|').map(x=>`<span class="ph">${esc(x)}</span>`).join('');
@@ -367,8 +367,9 @@ function landing(){
       ${p.seats?`<div class="seat">定員 ${esc(p.seats)}名</div>`:''}
       <ul>${(p.items||[]).map(x=>`<li>${ph(x)}</li>`).join('')}</ul></div>`).join('');
   const dm=CFG.decide_min||7;
-  const contact=CFG.note_url?`<a class="btn solid" href="${esc(CFG.note_url)}" target="_blank" rel="noopener">${esc(CFG.note_label||'ご入会')}</a>`:
-      `<span class="btn solid" style="opacity:.45;cursor:default">ご入会は準備中です</span>`;
+  const contact=(CFG.bookers_url?`<a class="btn solid" href="${esc(CFG.bookers_url)}" target="_blank" rel="noopener">ご入会（Bookers）</a>`:'')
+      +(CFG.note_url?`<a class="btn solid" href="${esc(CFG.note_url)}" target="_blank" rel="noopener">${esc(CFG.note_label||'ご入会（note）')}</a>`:'')
+      ||`<span class="btn solid" style="opacity:.45;cursor:default">ご入会は準備中です</span>`;
   $('#app').innerHTML=`
   <section class="hero">
     <div class="crest">${esc(String(CFG.brand||"").charAt(0))}</div>
@@ -420,9 +421,9 @@ function landing(){
   <section class="sec"><div class="wrap adm fade">
     <div class="sc">V.&nbsp; Admission</div>
     <div class="rule"></div>
-    <p>${ph('ご入会は、|Bookers の|メンバーシップから。')}</p>
+    <p>${ph('ご入会は、|Bookers または note の|メンバーシップから。')}</p>
     <div class="btns">${contact}${CFG.line_url?`<a class="btn" href="${esc(CFG.line_url)}" target="_blank" rel="noopener">公式LINE</a>`:''}</div>
-    <div class="s">${ph('ご入会後すぐ、|メンバー限定の掲示板で|パスをお知らせします。')}</div>
+    <div class="s">${ph('ご入会後すぐ、|会員限定の投稿で|パスをお知らせします。')}</div>
   </div></section>
   ${footer()}`;
   fades();
@@ -465,7 +466,7 @@ function terms(){
     '同じレースの選定・判定は、どのプランでも同じ内容です。プランによって買い目を変えることはありません。',
     '「ローンチ前の検証」は過去のデータによる集計で、運用の成績ではありません。過去の成績は将来の成績を保証しません。',
     'オッズ・出走取消・結果などの正式な情報は、JRAの発表をご確認ください。表示の遅れや誤りにより損害が生じた場合、当サービスの故意または重大な過失によるときを除き、当サービスが受け取った当月の利用料金を上限として責任を負います。',
-    'ご利用は Bookers のメンバーシップ（月額・毎月自動更新）です。解約は Bookers から行えます。お支払い済みの月の返金はいたしかねますが、当サービスの都合で提供できなかった場合は、その分をお返しします。',
+    'ご利用は Bookers または note のメンバーシップ（月額・毎月自動更新）です。解約はご入会先から行えます。お支払い済みの月の返金はいたしかねますが、当サービスの都合で提供できなかった場合は、その分をお返しします。',
     '会員鍵はご本人専用です。第三者への譲渡・共有、掲示内容の転載・再配布はお断りします。確認した場合は予告なく利用を停止します。',
     '回線やシステムの障害により、判定・掲示ができない場合があります。判定の時刻に判定できなかったレースは、記録に含めません。',
 ];
