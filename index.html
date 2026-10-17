@@ -13,6 +13,7 @@
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="apple-touch-icon" href="icon.png">
+<meta name="apple-mobile-web-app-title" content="SOLIDUS">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%230E0D0B'/%3E%3Ccircle cx='32' cy='32' r='24' fill='none' stroke='%23C6A15B' stroke-width='2'/%3E%3Ctext x='32' y='42' text-anchor='middle' font-family='Georgia,serif' font-size='28' fill='%23C6A15B'%3ES%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -171,20 +172,6 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .sheet .err{color:#D99682;font-size:12px;min-height:22px;margin-top:10px}
 .sheet .btn{width:100%;margin-top:8px}
 .sheet .x{position:absolute;top:0;right:0}
-.sheet.form .box{max-height:92svh;overflow:auto;text-align:left}
-.sheet.form h3{text-align:center}
-.sheet.form p.c{text-align:center}
-.fm label{display:block;font-size:11px;letter-spacing:.14em;color:var(--mute);margin:18px 0 6px}
-.fm label b{color:var(--gold);font-weight:500;margin-left:6px;font-size:10px}
-.fm input[type=text],.fm select,.fm textarea{width:100%;border:0;border-bottom:1px solid var(--rule);background:transparent;padding:8px 2px;font:inherit;font-size:15px;color:var(--ink);outline:none;border-radius:0}
-.fm input[type=text]:focus,.fm select:focus,.fm textarea:focus{border-color:var(--ink)}
-.fm select option{background:var(--card);color:var(--ink)}
-.fm textarea{min-height:88px;resize:vertical;font-family:var(--jp);line-height:1.9}
-.fm .ck{display:flex;gap:10px;align-items:flex-start;font-size:12px;color:var(--ink2);margin-top:14px;line-height:1.8}
-.fm .ck input{margin-top:6px;width:15px;height:15px;flex:none;accent-color:var(--ink)}
-.fm .ck a{border-bottom:1px solid var(--rule)}
-.fm .msg{font-size:12px;min-height:22px;margin-top:12px;text-align:center;color:var(--ink2)}
-.fm .done{text-align:center;padding:30px 0 10px;font-family:var(--jp);font-size:15px;line-height:2.1;letter-spacing:.06em}
 
 
 .mh .in{height:56px}
@@ -321,13 +308,6 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     <button class="btn ghost" id="kx" style="margin-top:10px">CLOSE</button>
   </div>
 </div>
-<div class="sheet form" id="apply" role="dialog" aria-modal="true">
-  <div class="box">
-    <h3>ADMISSION</h3>
-    <p class="c">入会のご相談</p>
-    <div class="fm" id="fm"></div>
-  </div>
-</div>
 <script>
 const CFG={"brand": "SOLIDUS", "brand_sub": "PRIVATE RACING OFFICE", "brand_kana": "ソリドゥス", "tagline": "一鞍を、|選び抜く。", "lead": "選び抜いた一鞍と、|検証を通った条件だけ。", "contact_url": "", "contact_label": "入会のご相談", "selector_name": "S.", "selector_title": "セレクター", "plans": [{"id": "prive", "name": "MEMBERSHIP", "jp": "メンバーシップ", "price": 50000, "items": ["スペシャル・セレクション|（印・買い目）", "パターン・シグナル|（締切直前の自動判定）", "すべての掲示の|成績"]}], "legal": {"seller": "", "manager": "", "address": "", "tel": "", "email": "", "price_note": "月額 50,000円（税込）。Bookers のメンバーシップの価格が正です", "extra_fee": "インターネット接続料金・通信料金はお客様のご負担となります。", "payment": "Bookers の決済方法による（クレジットカード・キャリア決済ほか）", "timing": "ご入会後すぐ、Bookers のメンバーシップ限定の掲示板でパスをお知らせします。パスは毎週切り替わり、新しいパスも同じ掲示板でお知らせします。", "cancel": "Bookers のメンバーシップは毎月自動で更新されます。解約は Bookers のメンバーシップ管理から行えます。お支払い済みの月の返金はいたしかねます。"}, "launch_date": "", "decide_min": 7, "note_url": "", "note_label": "ご入会（Bookers）", "sel_deadline_min": 30, "line_url": "https://line.me/R/ti/p/@554lmipt", "unit_yen": 10000, "gas_url": "https://script.google.com/macros/s/AKfycbxLug_OUAQARMTg4WlL2XYXhqRvF9pxTZ2d5S_TUHVIfdIGYPyNJZg1Jc1ZJYKeZcroVQ/exec", "site_url": "https://solidus-racing.github.io/"};
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
@@ -446,7 +426,6 @@ function landing(){
   </div></section>
   ${footer()}`;
   fades();
-  $$('[data-apply]').forEach(b=>b.onclick=openApply);
 }
 function kpi(s){ const roi=s.cost?(s.ret/s.cost*100):null;
   return `<div class="kpis"><div><div class="v">${roi==null?'—':roi.toFixed(1)}<small>${roi==null?'':'%'}</small></div><div class="l">回収率</div></div>
@@ -494,44 +473,6 @@ function terms(){
     <ol>${t.map(x=>`<li>${esc(x)}</li>`).join('')}</ol><a class="back" href="#top">${IC.back}<span>BACK</span></a></div></section>${footer()}`; scrollTo(0,0); }
 
 function planName(id){ const p=(CFG.plans||[]).find(x=>x.id===id); return p?p.name:String(id||'').toUpperCase(); }
- 
-function openApply(){
-  const plans=(CFG.plans||[]).map(p=>`<option>${esc(p.name)}（${esc(p.jp)}）</option>`).join('');
-  $('#fm').innerHTML=`<label>お名前<b>必須</b></label><input type="text" id="ap_name" maxlength="60" autocomplete="name">
-    <label>ご連絡先（メールまたはお電話）<b>必須</b></label><input type="text" id="ap_contact" maxlength="120" autocomplete="email">
-    <label>ご希望のプラン</label><select id="ap_plan"><option>未定・相談したい</option>${plans}</select>
-    <label>ご紹介者（任意）</label><input type="text" id="ap_ref" maxlength="60">
-    <label>ご質問（任意）</label><textarea id="ap_msg" maxlength="1000"></textarea>
-    <div class="ck"><input type="checkbox" id="ap_age"><span>${ph('20歳以上です。')}</span></div>
-    <div class="ck"><input type="checkbox" id="ap_agree"><span>${ph('ご利用条件と|プライバシーポリシーに|同意します。')}</span></div>
-    <div class="msg" id="ap_m"></div>
-    <button class="btn solid" id="ap_go" style="width:100%;margin-top:6px">SEND</button>
-    <button class="btn ghost" id="ap_x" style="width:100%;margin-top:10px">CLOSE</button>`;
-  $('#apply').classList.add('on');
-  $('#ap_x').onclick=()=>$('#apply').classList.remove('on');
-  $('#ap_go').onclick=async()=>{
-    const f={name:$('#ap_name').value.trim(),contact:$('#ap_contact').value.trim(),plan:$('#ap_plan').value,ref:$('#ap_ref').value.trim(),msg:$('#ap_msg').value.trim(),age:$('#ap_age').checked,agree:$('#ap_agree').checked};
-    const m=$('#ap_m');
-    if(!f.name||!f.contact) return m.textContent='お名前とご連絡先をご記入ください。';
-    if(!f.age||!f.agree) return m.textContent='確認の2項目にチェックをお願いいたします。';
-    if(!CFG.gas_url) return m.textContent='（見本のため送信されません）';
-    $('#ap_go').disabled=true; m.textContent='送信しています…';
-    let r=null; try{ r=await fetch(CFG.gas_url,{method:'POST',body:JSON.stringify({action:'apply',form:f})}).then(x=>x.json()); }catch(e){}
-    if(r&&r.ok){ $('#fm').innerHTML=`<div class="done">${ph('ご相談を|承りました。')}<br>${ph('担当より、|追ってご連絡いたします。')}</div><button class="btn ghost" id="ap_x2" style="width:100%;margin-top:18px">CLOSE</button>`; $('#ap_x2').onclick=()=>$('#apply').classList.remove('on'); }
-    else { $('#ap_go').disabled=false; m.textContent=r&&r.err==='wait'?'少し時間をおいてから、もう一度お送りください。':'送信できませんでした。時間をおいて、もう一度お試しください。'; }
-  };
-}
-
-function privacy(){
-  topbar('pub'); const L=CFG.legal||{};
-  const t=['当サイトは、お名前・ご連絡先などの個人情報を集めません。',
-    'ご入会とお支払いは Bookers で行われ、その情報は Bookers の定めに従って取り扱われます。当サービスがカード情報などを受け取ることはありません。',
-    'お問い合わせでいただいた情報は、回答のためだけに使い、法令に基づく場合を除き第三者に提供しません。',
-    '開示・訂正・削除：ご本人からのご請求があれば、遅滞なく対応します。'+(L.email?'お問い合わせ先：'+L.email:'お問い合わせ先は特定商取引法に基づく表記をご覧ください。'),
-    '会員ページは、ご自身の端末に会員パスと表示の設定だけを保存します（ブラウザの保存領域）。'];
-  $('#app').innerHTML=`<section class="legal"><div class="narrow"><div class="sc" style="text-align:center">Privacy</div><h2>${ph('プライバシー|ポリシー')}</h2>
-    <ol>${t.map(x=>`<li>${esc(x)}</li>`).join('')}</ol><a class="back" href="#top">${IC.back}<span>BACK</span></a></div></section>${footer()}`; scrollTo(0,0); }
-
  
 function askKey(){ $('#sheet').classList.add('on'); $('#kerr').textContent=''; setTimeout(()=>$('#kin').focus(),250); }
 function closeKey(){ $('#sheet').classList.remove('on'); }
@@ -634,7 +575,7 @@ function paneSig(){
   h+=`<div class="muted" style="text-align:center;margin-top:14px">${ph('判定は発走'+dm+'分前の|オッズで確定します。')}</div>`;
   if(!ids.length) h+=`<div class="empty" style="margin-top:22px">${ph('この日は|条件に合う馬が|いません。')}</div>`;
   ids.forEach(key=>{ const c=cands[key]||{}, d=dec[key], st=setl[key], base=c.race||(d&&d.race)||{}, r=raceOf(date,base.rid)||base, P=patOf(c.pid||(d&&d.pid));
-    const band=(d&&d.band)||c.band||[0,1e9], mins=minsTo(date,r.time), stt=d?d.status:'watch';
+    const band=(d&&d.band)||c.band||[0,1e9], mins=minsTo(date,r.time), stt=d?d.status:(mins!=null&&mins<-1?'none':'watch');
     let pill='';
     if(st&&st.status==='buy') pill=st.ret>0?`<span class="st hit">的中</span>`:`<span class="st">不的中</span>`;
     else if(stt==='buy') pill=`<span class="st buy">確定　買い</span>`;
@@ -645,9 +586,10 @@ function paneSig(){
     const ord=(r.result&&r.result.order)||[];
     const rows=((d&&d.cands)||c.cands||[]).map(hh=>{ const od=d?hh.odds:oddsOf(r,hh.uno), inb=od!=null&&od>=band[0]&&od<=band[1], fin=ord.indexOf(hh.uno);
       return `<div class="cand ${d&&!hh.hit?'lost':''}">${cap(hh.uno,hh.waku)}<div class="hn">${esc(hh.name)}${fin>=0&&fin<3?`<small class="muted">　${fin+1}着</small>`:''}<span class="f">${(hh.facts||[]).map(esc).join('　')}</span></div>
-        <div class="o"><span class="num">${od?od.toFixed(1):'—'}</span><span class="b ${inb?'in':'out'}">${od==null?'取消':(d?'判定 ':'いま ')+(inb?'圏内':'圏外')}</span></div></div>`; }).join('');
+        <div class="o"><span class="num">${od?od.toFixed(1):'—'}</span><span class="b ${inb?'in':'out'}">${od==null?'取消':(d?'判定 ':stt==='none'?'':'いま ')+(inb?'圏内':'圏外')}</span></div></div>`; }).join('');
     let clock='';
-    if(!d&&mins!=null){ const left=mins-dm; clock=`<div class="clock">${IC.clock}<span>${left>0?`判定まで ${fmtLeft(left)}（${addMin(r.time,-dm)} 確定）`:'判定中…'}</span></div>`; }
+    if(!d&&mins!=null&&mins<-1) clock=`<div class="clock">${IC.clock}<span>判定の時刻に判定できなかったため、記録に入れません</span></div>`;
+    else if(!d&&mins!=null){ const left=mins-dm; clock=`<div class="clock">${IC.clock}<span>${left>0?`判定まで ${fmtLeft(left)}（${addMin(r.time,-dm)} 確定）`:'判定中…'}</span></div>`; }
     else if(d&&d.status!=='none') clock=`<div class="clock">${IC.clock}<span>${hm(d.at)} 確定　発走${Math.round(d.mins)}分前・${esc(d.odds_at||'')}時点のオッズ</span></div>`;
     else if(d) clock=`<div class="clock">${IC.clock}<span>${esc(d.why||'')}</span></div>`;
     const bets=(st&&st.bets)||(d&&d.bets)||[], partners=(d&&d.partners)||[];
@@ -706,6 +648,15 @@ async function liveOdds(){
 }
 
  
+let tickBusy=false;
+async function tick(){  
+  if(tickBusy||location.hash!=='#members'||!ME) return; tickBusy=true;
+  try{ const gen=PUB&&PUB.gen, p=await getJSON('pub.json');
+    if(p&&p.gen!==gen){ const e=await getJSON('enc.json'); if(e){ PUB=p; ENC=e;
+        if(MKEY&&await openWith(MKEY)){ const y=scrollY; members(); scrollTo(0,y); }
+        else { ME=null; SEC={}; landing(); askKey(); $('#kerr').textContent='パスの期限が切れました。新しいパスを入力してください。'; } } }
+    else liveOdds(); }
+  finally{ tickBusy=false; } }
 async function loadAll(){ const [p,e]=await Promise.all([getJSON('pub.json'),getJSON('enc.json')]); if(p) PUB=p; if(e) ENC=e; }
 async function route(){
   const h=location.hash;
@@ -719,10 +670,8 @@ window.addEventListener('hashchange',route);
 (async()=>{
   if(CFG.sample){ const s=document.createElement('div'); s.className='sample'; s.textContent='見本データ — 実際の成績ではありません'; document.body.appendChild(s); }
   await loadAll(); route();
-  setInterval(async()=>{  
-    if(location.hash!=='#members'||!ME) return; const gen=PUB&&PUB.gen; await loadAll();
-    if(PUB&&PUB.gen!==gen&&MKEY){ const y=scrollY; if(await openWith(MKEY)){ members(); scrollTo(0,y); } }
-    else liveOdds(); },60000);
+  setInterval(tick,60000);
+  document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='visible') tick(); });
   setInterval(()=>{ if(location.hash==='#members'&&ME&&UI.tab==='sig'){ const y=scrollY; paneSig(); scrollTo(0,y); } },20000);
 })();
 </script>
