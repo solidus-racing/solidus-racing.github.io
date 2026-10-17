@@ -220,6 +220,8 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .marks .od{font-family:var(--en);font-size:17px;color:var(--ink2);font-variant-numeric:lining-nums tabular-nums}
 .marks .od small{font-family:var(--sans);font-size:10px;color:var(--mute);margin-left:2px}
 .marks li.fin{background:var(--hit)}
+.marks li.scr{opacity:.45}
+.marks li.scr .od small{font-size:11px;letter-spacing:.1em;color:var(--mute)}
 .bets{margin-top:18px}
 .bets .bh{font-size:11px;letter-spacing:.2em;color:var(--mute);display:flex;justify-content:space-between;padding-bottom:6px;border-bottom:1px solid var(--rule)}
 .bet{display:grid;grid-template-columns:1fr auto;gap:2px 12px;padding:11px 0;border-bottom:1px solid var(--rule2)}
@@ -569,8 +571,8 @@ function paneSel(){
     const sb=st?st.bets:null;
     const won=st&&st.ret>0;
     h+=`<article class="rc ${won?'hitc':''}">${p.level?`<span class="lv">LEVEL ${esc(p.level)}</span>`:''}${rcHead(r)}
-      <ul class="marks">${mk.map(([u,m])=>{ const hh=runner(r,u), od=oddsOf(r,u), fin=top3.indexOf(+u);
-        return `<li class="${fin>=0?'fin':''}"><span class="mk">${esc(m)}</span>${cap(u,hh.waku)}<span class="hn">${esc(hh.name||'')}${fin>=0?`<small>${fin+1}着</small>`:''}</span><span class="od">${od?od.toFixed(1):''}<small>${od?'倍':''}</small></span></li>`; }).join('')}</ul>
+      <ul class="marks">${mk.map(([u,m])=>{ const hh=runner(r,u), od=oddsOf(r,u), fin=top3.indexOf(+u), lo=LIVE[r.rid], scr=!!hh.scr||(lo&&lo.m[u]===null&&Object.values(lo.m).some(v=>v>0));
+        return `<li class="${fin>=0?'fin':''}${scr?' scr':''}"><span class="mk">${esc(m)}</span>${cap(u,hh.waku)}<span class="hn">${esc(hh.name||'')}${fin>=0?`<small>${fin+1}着</small>`:''}</span><span class="od">${scr?'<small>取消</small>':od?od.toFixed(1):''}<small>${!scr&&od?'倍':''}</small></span></li>`; }).join('')}</ul>
       ${(p.bets||[]).length?`<div class="bets"><div class="bh"><span>買い目</span><span>金額</span></div>${p.bets.map((b,i)=>betRow(b,sb&&sb[i])).join('')}
         <div class="tot"><span>合計</span><span class="num">${yen(p.bets.reduce((a,b)=>a+expand(b).length*b.unit,0))}<span class="muted" style="font-family:var(--sans);font-size:11px">　円</span></span></div></div>`:''}
       ${p.comment?`<div class="cm">${esc(p.comment)}</div>`:''}
