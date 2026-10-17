@@ -328,7 +328,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   </div>
 </div>
 <script>
-const CFG={"brand": "SOLIDUS", "brand_sub": "PRIVATE RACING OFFICE", "brand_kana": "ソリドゥス", "tagline": "一鞍を、|選び抜く。", "lead": "完全招待制・定員制の、|競馬のための私設室。", "contact_url": "", "contact_label": "入会のご相談", "selector_name": "S.", "selector_title": "セレクター", "plans": [{"id": "prive", "name": "MEMBERSHIP", "jp": "メンバーシップ", "price": 50000, "seats": 20, "items": ["スペシャル・セレクション|（印・買い目・見解）", "パターン・シグナル|（締切直前の自動判定）", "すべての掲示の|成績"]}], "legal": {"seller": "", "manager": "", "address": "", "tel": "", "email": "", "price_note": "税込50,000円（1か月）。Bookers の販売ページの価格が正です", "extra_fee": "インターネット接続料金・通信料金はお客様のご負担となります。", "payment": "Bookers の決済方法による", "timing": "ご購入後すぐ、Bookers の購入者向けページでパスをお知らせします。パスはご購入月の末日まで有効です。", "cancel": "デジタルコンテンツの性質上、パスをお知らせした後の返金はいたしかねます。自動更新はありません。翌月もご利用の場合は、翌月分をお買い求めください。"}, "launch_date": "", "decide_min": 7, "note_url": "", "note_label": "ご入会（Bookers）", "unit_yen": 10000, "gas_url": "https://script.google.com/macros/s/AKfycbxLug_OUAQARMTg4WlL2XYXhqRvF9pxTZ2d5S_TUHVIfdIGYPyNJZg1Jc1ZJYKeZcroVQ/exec", "site_url": "https://solidus-racing.github.io/"};
+const CFG={"brand": "SOLIDUS", "brand_sub": "PRIVATE RACING OFFICE", "brand_kana": "ソリドゥス", "tagline": "一鞍を、|選び抜く。", "lead": "選び抜いた一鞍と、|検証を通った条件だけ。", "contact_url": "", "contact_label": "入会のご相談", "selector_name": "S.", "selector_title": "セレクター", "plans": [{"id": "prive", "name": "MEMBERSHIP", "jp": "メンバーシップ", "price": 50000, "items": ["スペシャル・セレクション|（印・買い目・見解）", "パターン・シグナル|（締切直前の自動判定）", "すべての掲示の|成績"]}], "legal": {"seller": "", "manager": "", "address": "", "tel": "", "email": "", "price_note": "月額 50,000円（税込）。Bookers のメンバーシップの価格が正です", "extra_fee": "インターネット接続料金・通信料金はお客様のご負担となります。", "payment": "Bookers の決済方法による（クレジットカード・キャリア決済ほか）", "timing": "ご入会後すぐ、Bookers のメンバーシップ限定記事でパスをお知らせします。パスは毎月切り替わり、新しいパスも同じ記事でお知らせします。", "cancel": "Bookers のメンバーシップは毎月自動で更新されます。解約は Bookers のメンバーシップ管理から行えます。お支払い済みの月の返金はいたしかねます。"}, "launch_date": "", "decide_min": 7, "note_url": "", "note_label": "ご入会（Bookers）", "unit_yen": 10000, "gas_url": "https://script.google.com/macros/s/AKfycbxLug_OUAQARMTg4WlL2XYXhqRvF9pxTZ2d5S_TUHVIfdIGYPyNJZg1Jc1ZJYKeZcroVQ/exec", "site_url": "https://solidus-racing.github.io/"};
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const ph=s=>String(s||'').split('|').map(x=>`<span class="ph">${esc(x)}</span>`).join('');
@@ -383,11 +383,11 @@ function landing(){
   const plans=(CFG.plans||[]).map((p,i,a)=>`<div class="plan ${i===a.length-1?'top3':''} fade">
       <div class="nm">${esc(p.name)}</div><div class="jn">${esc(p.jp)}</div>
       <div class="pr">¥${yen(p.price)}<small>／月（税込）</small></div>
-      <div class="seat">定員 ${esc(p.seats)}名</div>
+      ${p.seats?`<div class="seat">定員 ${esc(p.seats)}名</div>`:''}
       <ul>${(p.items||[]).map(x=>`<li>${ph(x)}</li>`).join('')}</ul></div>`).join('');
   const dm=CFG.decide_min||7;
-  const contact=CFG.note_url?`<a class="btn solid" href="${esc(CFG.note_url)}" target="_blank" rel="noopener">${esc(CFG.note_label||'ご入会')}</a>`:CFG.contact_url?`<a class="btn solid" href="${esc(CFG.contact_url)}" target="_blank" rel="noopener">${esc(CFG.contact_label||'入会のご相談')}</a>`:
-      `<button class="btn solid" data-apply>${esc(CFG.contact_label||'入会のご相談')}</button>`;
+  const contact=CFG.note_url?`<a class="btn solid" href="${esc(CFG.note_url)}" target="_blank" rel="noopener">${esc(CFG.note_label||'ご入会')}</a>`:
+      `<span class="btn solid" style="opacity:.45;cursor:default">ご入会は準備中です</span>`;
   $('#app').innerHTML=`
   <section class="hero">
     <div class="crest">${esc(String(CFG.brand||"").charAt(0))}</div>
@@ -432,16 +432,16 @@ function landing(){
   </div></section>
 
   <section class="sec" id="plans"><div class="wrap">
-    <div class="hd fade"><div class="sc">IV.&nbsp; Membership</div><h2>${ph('会員制度')}</h2><p>${ph('席数を限って|ご案内しています。')}</p></div>
+    <div class="hd fade"><div class="sc">IV.&nbsp; Membership</div><h2>${ph('会員制度')}</h2><p>${ph('ひとつのプランで、|すべてを。')}</p></div>
     <div class="plans ${(CFG.plans||[]).length===1?'one':''}">${plans}</div>
   </div></section>
 
   <section class="sec"><div class="wrap adm fade">
     <div class="sc">V.&nbsp; Admission</div>
     <div class="rule"></div>
-    <p>${ph('ご入会は、|ご紹介|または面談のうえで|ご案内しています。')}</p>
+    <p>${ph('ご入会は、|Bookers の|メンバーシップから。')}</p>
     <div class="btns">${contact}</div>
-    <div class="s">${ph('空席がない場合は、|順にご連絡いたします。')}</div>
+    <div class="s">${ph('ご入会後すぐ、|限定記事で|パスをお知らせします。')}</div>
   </div></section>
   ${footer()}`;
   fades();
@@ -485,10 +485,10 @@ function terms(){
     '同じレースの選定・判定は、どのプランでも同じ内容です。プランによって買い目を変えることはありません。',
     '「ローンチ前の検証」は過去のデータによる集計で、運用の成績ではありません。過去の成績は将来の成績を保証しません。',
     'オッズ・出走取消・結果などの正式な情報は、JRAの発表をご確認ください。表示の遅れや誤りにより損害が生じた場合、当サービスの故意または重大な過失によるときを除き、当サービスが受け取った当月の利用料金を上限として責任を負います。',
-    'パスはご購入月の末日まで有効です。自動更新はありません。パスをお知らせした後の返金はいたしかねますが、当サービスの都合で提供できなかった場合は、その分をお返しします。',
+    'ご利用は Bookers のメンバーシップ（月額・毎月自動更新）です。解約は Bookers から行えます。お支払い済みの月の返金はいたしかねますが、当サービスの都合で提供できなかった場合は、その分をお返しします。',
     '会員鍵はご本人専用です。第三者への譲渡・共有、掲示内容の転載・再配布はお断りします。確認した場合は予告なく利用を停止します。',
     '回線やシステムの障害により、判定・掲示ができない場合があります。判定の時刻に判定できなかったレースは、記録に含めません。',
-    '入会のご相談でお預かりしたお名前・ご連絡先は、ご入会のご案内とご連絡のためだけに使い、法令に基づく場合を除き第三者に提供しません。'];
+];
   $('#app').innerHTML=`<section class="legal"><div class="narrow"><div class="sc" style="text-align:center">Terms</div><h2>${ph('ご利用条件・免責')}</h2>
     <ol>${t.map(x=>`<li>${esc(x)}</li>`).join('')}</ol><a class="back" href="#top">${IC.back}<span>BACK</span></a></div></section>${footer()}`; scrollTo(0,0); }
 
@@ -523,10 +523,9 @@ function openApply(){
 
 function privacy(){
   topbar('pub'); const L=CFG.legal||{};
-  const t=['お預かりする情報：入会のご相談でいただくお名前・ご連絡先・ご希望・ご質問。会員ページでは、ご本人を特定する情報を集めません。',
-    '利用目的：ご入会のご案内、お問い合わせへの回答、サービスに関する重要なお知らせのためだけに使います。',
-    '第三者への提供：法令に基づく場合を除き、ご本人の同意なく第三者に提供しません。',
-    '管理：受け付けた情報は、運営者だけが見られる場所で保管し、目的を終えたものは消去します。',
+  const t=['当サイトは、お名前・ご連絡先などの個人情報を集めません。',
+    'ご入会とお支払いは Bookers で行われ、その情報は Bookers の定めに従って取り扱われます。当サービスがカード情報などを受け取ることはありません。',
+    'お問い合わせでいただいた情報は、回答のためだけに使い、法令に基づく場合を除き第三者に提供しません。',
     '開示・訂正・削除：ご本人からのご請求があれば、遅滞なく対応します。'+(L.email?'お問い合わせ先：'+L.email:'お問い合わせ先は特定商取引法に基づく表記をご覧ください。'),
     '会員ページは、ご自身の端末に会員パスと表示の設定だけを保存します（ブラウザの保存領域）。'];
   $('#app').innerHTML=`<section class="legal"><div class="narrow"><div class="sc" style="text-align:center">Privacy</div><h2>${ph('プライバシー|ポリシー')}</h2>
