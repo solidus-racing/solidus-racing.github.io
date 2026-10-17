@@ -587,8 +587,7 @@ function paneSig(){
   const rk=k=>(cands[k]||dec[k]||{}).race||{};
   const ids=[...new Set(Object.keys(cands).concat(Object.keys(dec)))].sort((a,b)=>(rk(a).time||'').localeCompare(rk(b).time||''));
   let h=`<div class="mhd"><div class="sc">Pattern Signal</div><h2>${ph('パターン・|シグナル')}</h2><div class="m">${ph('検証を通った条件だけを|掲示します。')}</div></div>`;
-  h+=PS.map(P=>`<div class="intro"><b>${esc(P.code)}　${esc(P.name)}</b><br>${ph(P.desc||'')}<br>${ph('買い目は|'+(P.bets||''))}${ph('。|1単位＝'+yen(CFG.unit_yen)+'円')}</div>`).join('');
-  h+=`<div class="muted" style="text-align:center;margin-top:14px">${ph('判定は発走'+dm+'分前の|オッズで確定します。')}</div>`;
+  h+=`<div class="muted" style="text-align:center;margin-top:14px">${ph('判定は発走'+dm+'分前の|オッズで確定します。')}<br>${ph('1単位＝'+yen(CFG.unit_yen)+'円')}</div>`;
   if(!ids.length) h+=`<div class="empty" style="margin-top:22px">${ph('この日は|条件に合う馬が|いません。')}</div>`;
   ids.forEach(key=>{ const c=cands[key]||{}, d=dec[key], st=setl[key], base=c.race||(d&&d.race)||{}, r=raceOf(date,base.rid)||base, P=patOf(c.pid||(d&&d.pid));
     const band=(d&&d.band)||c.band||[0,1e9], mins=minsTo(date,r.time), stt=d?d.status:(mins!=null&&mins<-1?'none':'watch');
