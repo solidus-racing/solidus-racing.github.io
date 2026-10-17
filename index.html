@@ -560,7 +560,7 @@ function paneSel(){
   const date=UI.date, S=SEC['s:'+date]||{}, picks=S.picks||{}, setl=S.settled||{};
   const ids=Object.keys(picks).sort((a,b)=>((raceOf(date,a)||{}).time||'').localeCompare((raceOf(date,b)||{}).time||''));
   const last=ids.map(i=>picks[i].updated_at).sort().pop();
-  let h=`<div class="mhd"><div class="sc">Special Selection</div><h2>${ph(esc(CFG.selector_name)+' の|選定')}</h2>
+  let h=`<div class="mhd"><div class="sc">Special Selection</div><h2>${ph('スペシャル・|セレクション')}</h2>
     <div class="m">${ids.length?`${ids.length}鞍${last?`　最終更新 ${hm(last)}`:''}`:''}</div></div>`;
   if(!ids.length) h+=`<div class="intro" style="text-align:center">${ph('この日の選定は、|決まりしだい|ここに掲示します。')}</div>`;
   ids.forEach(rid=>{ const x=picks[rid], p=x.pick||{}, r=raceOf(date,rid)||{}, st=setl[rid];
