@@ -111,6 +111,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .kpis.sub .v{font-size:24px}
 .kpis .v.pos{color:var(--gold)}
 .recpub .blk.total h3{color:var(--gold)}
+.rth{font-family:var(--en);font-weight:500;font-size:14px;letter-spacing:.24em;color:var(--gold);margin:30px 0 12px}
 .ritem .row{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:baseline;padding:13px 0}
 .recnote{margin-top:34px;text-align:center;font-size:12px;letter-spacing:.12em;color:var(--mute);line-height:2}
 .rday+.rday{margin-top:14px}
@@ -477,13 +478,14 @@ function pubRecord(){
   const blk=(nm,k,s)=>`<div class="blk"><h3>${nm}<span>${s&&s.first?`${fmtD(s.first)} — ${fmtD(s.last)}`:''}</span></h3>${s&&s.n?kpi(s)+months(s)+recent(k):`<div class="empty">${ph('運用開始の日から、|すべての掲示を|ここに載せます。')}</div>`}</div>`;
   const note=(R.sel&&R.sel.n)||(R.sig&&R.sig.n)?`<div class="recnote">${ph('すべての掲示と買い目は、|会員ページの RECORD に|そのまま残しています。')}</div>`:'';
    
-  const g=(s,k)=>(s&&s[k])||0, a=R.sel||{}, b=R.sig||{};
-  const T={n:g(a,'n')+g(b,'n'), bet:g(a,'bet')+g(b,'bet'), hit:g(a,'hit')+g(b,'hit'), cost:g(a,'cost')+g(b,'cost'), ret:g(a,'ret')+g(b,'ret'),
-    first:[a.first,b.first].filter(Boolean).sort()[0]||null, last:[a.last,b.last].filter(Boolean).sort().pop()||null};
-  const pl=T.ret-T.cost;
-  const total=T.n?`<div class="blk total"><h3>TOTAL<span>${T.first?`${fmtD(T.first)} — ${fmtD(T.last)}`:''}</span></h3>${kpi(T)}
-    <div class="kpis sub"><div><div class="v">${yen(T.cost)}</div><div class="l">投資</div></div><div><div class="v">${yen(T.ret)}</div><div class="l">払戻</div></div><div><div class="v ${pl>0?'pos':''}">${pl>0?'+':''}${yen(pl)}</div><div class="l">収支</div></div></div></div>`:'';
+  const T=totalOf(R.sel,R.sig);
+  const total=T.n?`<div class="blk total"><h3>TOTAL<span>${T.first?`${fmtD(T.first)} — ${fmtD(T.last)}`:''}</span></h3>${kpi(T)}${subKpi(T)}</div>`:'';
   return total+blk('SPECIAL SELECTION','sel',R.sel)+blk('PATTERN SIGNAL','sig',R.sig)+note; }
+function totalOf(a,b){ a=a||{}; b=b||{}; const g=(s,k)=>s[k]||0;
+  return {n:g(a,'n')+g(b,'n'), bet:g(a,'bet')+g(b,'bet'), hit:g(a,'hit')+g(b,'hit'), cost:g(a,'cost')+g(b,'cost'), ret:g(a,'ret')+g(b,'ret'),
+    first:[a.first,b.first].filter(Boolean).sort()[0]||null, last:[a.last,b.last].filter(Boolean).sort().pop()||null}; }
+function subKpi(s){ const pl=(s.ret||0)-(s.cost||0);
+  return `<div class="kpis sub"><div><div class="v">${yen(s.cost||0)}</div><div class="l">投資</div></div><div><div class="v">${yen(s.ret||0)}</div><div class="l">払戻</div></div><div><div class="v ${pl>0?'pos':''}">${pl>0?'+':''}${yen(pl)}</div><div class="l">収支</div></div></div>`; }
 function recDx(k,x){
    
   const nm=u=>(x.names||{})[u]||'', MK=['◎','○','▲','△','☆','注'];
@@ -671,11 +673,14 @@ function paneRec(){
   const ks=[]; if(SEC['r:sel']) ks.push(['sel','SELECTION']); if(SEC['r:sig']) ks.push(['sig','SIGNAL']);
   if(!ks.some(k=>k[0]===UI.rk)) UI.rk=ks[0][0];
   const R=SEC['r:'+UI.rk], s=R.sum||{}, days=R.days||{};
-  let h=`<div class="mhd"><div class="sc">Record</div><h2>${ph('すべての掲示の|成績')}</h2><div class="m">${s.first?`${fmtD(s.first)} — ${fmtD(s.last)}`:''}</div></div>`;
-  if(ks.length>1) h+=`<div class="seg">${ks.map(k=>`<button data-k="${k[0]}" class="${k[0]===UI.rk?'on':''}">${k[1]}</button>`).join('')}</div>`;
-  h+=`<div style="margin-top:24px">${kpi(s)}</div>`;
+   
+  const T=totalOf((SEC['r:sel']||{}).sum, (SEC['r:sig']||{}).sum);
+  let h=`<div class="mhd"><div class="sc">Record</div><h2>${ph('すべての掲示の|成績')}</h2><div class="m">${T.first?`${fmtD(T.first)} — ${fmtD(T.last)}`:''}</div></div>`;
+  h+=`<div class="rth">TOTAL</div>${kpi(T)}${T.n?subKpi(T):''}`;
+  if(ks.length>1) h+=`<div class="seg" style="margin-top:40px">${ks.map(k=>`<button data-k="${k[0]}" class="${k[0]===UI.rk?'on':''}">${k[1]}</button>`).join('')}</div>`;
+  h+=`<div class="rth" style="margin-top:28px">${UI.rk==='sel'?'SPECIAL SELECTION':'PATTERN SIGNAL'}</div>${kpi(s)}`;
   if(s.n){
-    h+=`<div class="kpis" style="border-top:0"><div><div class="v" style="font-size:24px">${yen(s.cost)}</div><div class="l">投資</div></div><div><div class="v" style="font-size:24px">${yen(s.ret)}</div><div class="l">払戻</div></div><div><div class="v" style="font-size:24px;${s.ret-s.cost>0?'color:var(--gold)':''}">${s.ret-s.cost>0?'+':''}${yen(s.ret-s.cost)}</div><div class="l">収支</div></div></div>`;
+    h+=subKpi(s);
     h+=`<table class="mtab" style="margin-top:30px"><tr><th>月</th><th>レース</th><th>投資</th><th>払戻</th><th>回収率</th></tr>${(s.months||[]).slice().reverse().map(m=>`<tr><td>${esc(m[0])}</td><td>${m[3]}</td><td>${yen(m[1])}</td><td>${yen(m[2])}</td><td>${pct(m[2],m[1])}%</td></tr>`).join('')}</table>`;
      
     const dl=Object.keys(days).sort().reverse(), shown=dl.slice(0,UI.more||30);
