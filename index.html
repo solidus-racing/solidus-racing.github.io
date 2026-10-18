@@ -107,6 +107,10 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .recpub .blk+.blk{margin-top:44px}
 .recpub .rlist{margin-top:18px}
 .recpub .mtab{margin-top:18px}
+.kpis.sub{border-top:0}
+.kpis.sub .v{font-size:24px}
+.kpis .v.pos{color:var(--gold)}
+.recpub .blk.total h3{color:var(--gold)}
 .ritem .row{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:baseline;padding:13px 0}
 .recnote{margin-top:34px;text-align:center;font-size:12px;letter-spacing:.12em;color:var(--mute);line-height:2}
 .rday+.rday{margin-top:14px}
@@ -472,7 +476,14 @@ function pubRecord(){
   const months=s=>(s.months||[]).length>1?`<table class="mtab"><tr><th>月</th><th>レース</th><th>投資</th><th>払戻</th><th>回収率</th></tr>${s.months.slice().reverse().slice(0,6).map(m=>`<tr><td>${esc(m[0])}</td><td>${m[3]}</td><td>${yen(m[1])}</td><td>${yen(m[2])}</td><td>${pct(m[2],m[1])}%</td></tr>`).join('')}</table>`:'';
   const blk=(nm,k,s)=>`<div class="blk"><h3>${nm}<span>${s&&s.first?`${fmtD(s.first)} — ${fmtD(s.last)}`:''}</span></h3>${s&&s.n?kpi(s)+months(s)+recent(k):`<div class="empty">${ph('運用開始の日から、|すべての掲示を|ここに載せます。')}</div>`}</div>`;
   const note=(R.sel&&R.sel.n)||(R.sig&&R.sig.n)?`<div class="recnote">${ph('すべての掲示と買い目は、|会員ページの RECORD に|そのまま残しています。')}</div>`:'';
-  return blk('SPECIAL SELECTION','sel',R.sel)+blk('PATTERN SIGNAL','sig',R.sig)+note+P.map(btBox).join(''); }
+   
+  const g=(s,k)=>(s&&s[k])||0, a=R.sel||{}, b=R.sig||{};
+  const T={n:g(a,'n')+g(b,'n'), bet:g(a,'bet')+g(b,'bet'), hit:g(a,'hit')+g(b,'hit'), cost:g(a,'cost')+g(b,'cost'), ret:g(a,'ret')+g(b,'ret'),
+    first:[a.first,b.first].filter(Boolean).sort()[0]||null, last:[a.last,b.last].filter(Boolean).sort().pop()||null};
+  const pl=T.ret-T.cost;
+  const total=T.n?`<div class="blk total"><h3>TOTAL<span>${T.first?`${fmtD(T.first)} — ${fmtD(T.last)}`:''}</span></h3>${kpi(T)}
+    <div class="kpis sub"><div><div class="v">${yen(T.cost)}</div><div class="l">投資</div></div><div><div class="v">${yen(T.ret)}</div><div class="l">払戻</div></div><div><div class="v ${pl>0?'pos':''}">${pl>0?'+':''}${yen(pl)}</div><div class="l">収支</div></div></div></div>`:'';
+  return total+blk('SPECIAL SELECTION','sel',R.sel)+blk('PATTERN SIGNAL','sig',R.sig)+note; }
 function recDx(k,x){
    
   const nm=u=>(x.names||{})[u]||'', MK=['◎','○','▲','△','☆','注'];
