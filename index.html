@@ -61,6 +61,9 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .hero .tag{font-family:var(--jp);font-weight:500;font-size:clamp(22px,5.6vw,30px);letter-spacing:.2em;padding-left:.2em;line-height:1.7}
 .hero .lead{margin-top:14px;color:var(--ink2);font-size:14px;letter-spacing:.12em}
 .btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:40px}
+.btns .btn{flex:0 0 236px;min-width:236px;gap:10px}          
+.btns .btn svg{width:14px;height:14px;flex:none}
+@media (max-width:520px){ .btns{gap:10px} .btns .btn{flex:1 1 calc(50% - 5px);min-width:0;padding:0 8px;padding-left:calc(8px + .14em);font-size:12px;letter-spacing:.14em} }
 .btn{display:inline-flex;align-items:center;justify-content:center;height:50px;min-width:184px;padding:0 26px;border:1px solid var(--ink);font-size:13px;letter-spacing:.24em;padding-left:calc(26px + .24em);transition:background .25s,color .25s}
 .btn:hover{background:var(--ink);color:var(--paper)}
 .btn.solid{background:transparent;color:var(--gold);border-color:var(--gold)}
@@ -383,7 +386,7 @@ function topbar(mode){
     t.innerHTML=`<a class="wm" href="#top">${esc(CFG.brand)}</a><div class="who">${ME.ps?`<b class="en" style="letter-spacing:.2em">${esc(planName(ME.p))}</b>`:`<b>${esc(ME.n)}</b>様`}<button id="lo">EXIT</button></div>`;
     $('#lo').onclick=()=>{ ls.del('ecr_k'); ME=null; SEC={}; location.hash='#top'; };
   } else {
-    t.innerHTML=`<a class="wm" href="#top">${esc(CFG.brand)}</a><a class="lk" href="#members">${IC.key}<span>MEMBERS</span></a>`;
+    t.innerHTML=`<a class="wm" href="#top">${esc(CFG.brand)}</a><a class="lk" href="#members">${IC.key}<span>MEMBERS IN</span></a>`;
   }
 }
 
@@ -408,7 +411,7 @@ function landing(){
     <div class="rule"></div>
     <div class="tag">${ph(CFG.tagline)}</div>
     <div class="lead">${ph(CFG.lead)}</div>
-    <div class="btns">${contact}<a class="btn" href="#members">MEMBERS</a></div>
+    <div class="btns">${contact}<a class="btn" href="#members">${IC.key}<span>MEMBERS IN</span></a></div>
     <div class="scroll"></div>
   </section>
 
@@ -456,6 +459,7 @@ function landing(){
     <div class="s">${ph('ご入会後すぐ、|会員限定の投稿で|パスをお知らせします。')}</div>
   </div></section>
   ${footer()}`;
+  const rp=$('.recpub'); if(rp) rp.onclick=e=>{ const b=e.target.closest('button[data-o]'); if(!b) return; UI.open[b.dataset.o]=!UI.open[b.dataset.o]; rp.innerHTML=pubRecord(); };
   fades();
 }
 function kpi(s){ const roi=s.cost?(s.ret/s.cost*100):null;
@@ -472,8 +476,8 @@ function pubRecord(){
    
   const R=(PUB&&PUB.rec)||{}, P=(PUB&&PUB.patterns)||[], H=(PUB&&PUB.hist)||[];
   const recent=k=>{ const items=H.filter(i=>i.k===k).slice(0,5); if(!items.length) return '';
-    return `<div class="rlist">${items.map(i=>{ const pl=(i.ret||0)-(i.cost||0);
-      return `<div class="ritem"><div class="row"><span class="dt">${+i.d.slice(4,6)}.${+i.d.slice(6)}</span><span class="rn2">${esc(i.race.place||'')}${esc(i.race.R||'')}R　${esc(i.race.name||'')}</span><span class="pf ${pl>0?'pos':i.cost?'':'zero'}">${i.cost?(pl>0?'+':'')+yen(pl):'見送り'}</span></div></div>`; }).join('')}</div>`; };
+    return `<div class="rlist">${items.map(i=>{ const id='h'+k+i.d+(i.race.place||'')+(i.race.R||''), pl=(i.ret||0)-(i.cost||0);
+      return `<div class="ritem"><button data-o="${id}"><span class="dt">${+i.d.slice(4,6)}.${+i.d.slice(6)}</span><span class="rn2">${esc(i.race.place||'')}${esc(i.race.R||'')}R　${esc(i.race.name||'')}</span><span class="pf ${pl>0?'pos':i.cost?'':'zero'}">${i.cost?(pl>0?'+':'')+yen(pl):'見送り'}</span></button>${UI.open[id]?recDx(k,i):''}</div>`; }).join('')}</div>`; };
   const months=s=>(s.months||[]).length>1?`<table class="mtab"><tr><th>月</th><th>レース</th><th>投資</th><th>払戻</th><th>回収率</th></tr>${s.months.slice().reverse().slice(0,6).map(m=>`<tr><td>${esc(m[0])}</td><td>${m[3]}</td><td>${yen(m[1])}</td><td>${yen(m[2])}</td><td>${pct(m[2],m[1])}%</td></tr>`).join('')}</table>`:'';
   const blk=(nm,k,s)=>`<div class="blk"><h3>${nm}<span>${s&&s.first?`${fmtD(s.first)} — ${fmtD(s.last)}`:''}</span></h3>${s&&s.n?kpi(s)+months(s)+recent(k):`<div class="empty">${ph('運用開始の日から、|すべての掲示を|ここに載せます。')}</div>`}</div>`;
   const note=(R.sel&&R.sel.n)||(R.sig&&R.sig.n)?`<div class="recnote">${ph('すべての掲示と買い目は、|会員ページの RECORD に|そのまま残しています。')}</div>`:'';
