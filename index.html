@@ -126,6 +126,15 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .rdh .pf.pos{color:var(--gold)}
 .rdh .pf.zero{color:var(--mute)}
 button.more{display:block;margin:26px auto 0;padding:11px 28px;border:1px solid var(--rule);background:transparent;color:var(--ink2);font-size:12px;letter-spacing:.2em}
+.hv{list-style:none;margin:8px 0 0;padding:0}
+.hv li{display:grid;grid-template-columns:34px 30px 1fr;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--rule2);font-size:14px;letter-spacing:.04em}
+.hv .mk{font-family:var(--jp);font-size:17px;text-align:center;line-height:1;color:var(--gold)}
+.hv.res .mk{font-family:var(--sans);font-size:11px;letter-spacing:.1em;color:var(--mute)}
+.hv .no{font-family:var(--en);font-size:17px;text-align:center;font-variant-numeric:lining-nums}
+.hv .nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hv .nm small{font-size:11px;color:var(--mute);margin-left:8px}
+.hv li.fin{background:var(--hit)}
+.hv li.hit .nm{color:var(--gold)}
 .hx{display:flex;flex-wrap:wrap;gap:6px 18px;padding:10px 0 4px;font-size:13px;letter-spacing:.04em;font-variant-numeric:lining-nums}
 .hx b{font-family:var(--jp);font-weight:400;margin-right:5px;color:var(--gold)}
 .hx span.hit{color:var(--gold)}
@@ -493,11 +502,13 @@ function subKpi(s){ const pl=(s.ret||0)-(s.cost||0);
   return `<div class="kpis sub"><div><div class="v">${yen(s.cost||0)}</div><div class="l">投資</div></div><div><div class="v">${yen(s.ret||0)}</div><div class="l">払戻</div></div><div><div class="v ${pl>0?'pos':''}">${pl>0?'+':''}${yen(pl)}</div><div class="l">収支</div></div></div>`; }
 function recDx(k,x){
    
-  const nm=u=>(x.names||{})[u]||'', MK=['◎','○','▲','△','☆','注'];
+   
+  const nm=u=>(x.names||{})[u]||'', MK=['◎','○','▲','△','☆','注'], top3=(x.order||[]).slice(0,3);
   let h='<div class="dx">';
-  if(k==='sel'){ const mk=Object.entries(x.marks||{}).sort((a,b)=>MK.indexOf(a[1])-MK.indexOf(b[1])); if(mk.length) h+=`<div class="hx">${mk.map(([u,m])=>`<span><b>${esc(m)}</b>${esc(u)} ${esc(nm(u))}</span>`).join('')}</div>`; }
-  else{ const cs=x.cands||[]; if(cs.length) h+=`<div class="hx">${cs.map(c=>`<span class="${c.hit?'hit':''}">${esc(c.uno)} ${esc(c.name||'')}</span>`).join('')}</div>`; }
-  if(x.order&&x.order.length) h+=`<div class="hx res2"><b>RESULT</b>${x.order.slice(0,3).map(u=>`<span>${esc(u)} ${esc(nm(u))}</span>`).join('')}</div>`;
+  if(k==='sel'){ const mk=Object.entries(x.marks||{}).sort((a,b)=>MK.indexOf(a[1])-MK.indexOf(b[1]));
+    if(mk.length) h+=`<ul class="hv">${mk.map(([u,m])=>{ const f=top3.indexOf(+u); return `<li class="${f>=0?'fin':''}"><span class="mk">${esc(m)}</span><span class="no">${esc(u)}</span><span class="nm">${esc(nm(u))}${f>=0?`<small>${f+1}着</small>`:''}</span></li>`; }).join('')}</ul>`; }
+  else{ const cs=x.cands||[]; if(cs.length) h+=`<ul class="hv">${cs.map(c=>{ const f=top3.indexOf(+c.uno); return `<li class="${c.hit?'hit':''}${f>=0?' fin':''}"><span class="mk"></span><span class="no">${esc(c.uno)}</span><span class="nm">${esc(c.name||'')}${f>=0?`<small>${f+1}着</small>`:''}</span></li>`; }).join('')}</ul>`; }
+  if(top3.length) h+=`<div class="rcap" style="margin-top:14px">RESULT</div><ul class="hv res">${top3.map((u,i)=>`<li><span class="mk">${i+1}着</span><span class="no">${esc(u)}</span><span class="nm">${esc(nm(u))}</span></li>`).join('')}</ul>`;
   h+=(x.bets||[]).map(b=>betRow(b,b)).join('');
   if(x.cost) h+=`<div class="hx sum"><span>投資 ${yen(x.cost)}円</span><span>払戻 ${yen(x.ret)}円</span></div>`;
   return h+'</div>'; }
