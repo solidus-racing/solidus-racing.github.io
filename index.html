@@ -568,14 +568,15 @@ $('#kgo').onclick=async()=>{ const k=$('#kin').value; $('#kgo').textContent='…
 const DATES=()=>(PUB&&PUB.dates||[]).filter(d=>SEC['d:'+d.date]);
 function todayKey(){ const t=new Date(); return t.getFullYear()+String(t.getMonth()+1).padStart(2,'0')+String(t.getDate()).padStart(2,'0'); }
 function defDate(){ const ds=DATES().map(d=>d.date), t=todayKey(); return ds.find(d=>d>=t)||ds[ds.length-1]; }
-function tabsOf(){ const t=[]; if(Object.keys(SEC).some(s=>s.startsWith('s:'))) t.push(['sel','SELECTION']); if(Object.keys(SEC).some(s=>s.startsWith('g:'))) t.push(['sig','SIGNAL']); t.push(['rec','RECORD']); return t; }
+function tabsOf(){ const t=[], K=Object.keys(SEC); if(K.some(s=>s.startsWith('s:'))||SEC['r:sel']) t.push(['sel','SELECTION']); if(K.some(s=>s.startsWith('g:'))||SEC['r:sig']) t.push(['sig','SIGNAL']); t.push(['rec','RECORD']); return t; }
+function waitMsg(sc,h2){ return `<div class="mhd"><div class="sc">${sc}</div><h2>${ph(h2)}</h2></div><div class="intro" style="text-align:center">${ph('この開催の掲示は、|すべて RECORD に|移しました。')}<br>${ph('次回の開催まで|お待ちください。')}</div>`; }
 function members(){
   if(!ME){ landing(); askKey(); return; }
   topbar('mem');
   const tabs=tabsOf(); if(!UI.tab||!tabs.some(t=>t[0]===UI.tab)) UI.tab=tabs[0][0];
   if(!UI.date||!DATES().some(d=>d.date===UI.date)) UI.date=defDate();
   if(UI.rk==='sel'&&!SEC['r:sel']) UI.rk='sig';
-  const dates=UI.tab==='rec'?'':`<nav class="dates">${DATES().map(d=>`<button data-d="${d.date}" class="${d.date===UI.date?'on':''}"><span class="d">${d.md}</span><span class="w">${d.en}</span></button>`).join('')}</nav>`;
+  const dates=(UI.tab==='rec'||!DATES().length)?'':`<nav class="dates">${DATES().map(d=>`<button data-d="${d.date}" class="${d.date===UI.date?'on':''}"><span class="d">${d.md}</span><span class="w">${d.en}</span></button>`).join('')}</nav>`;
   $('#app').innerHTML=`<div class="narrow">${dates}<nav class="tabs">${tabs.map(t=>`<button data-t="${t[0]}" class="${t[0]===UI.tab?'on':''}">${t[1]}</button>`).join('')}</nav>
     <div id="pane"></div>${CFG.line_url?`<div style="text-align:center;margin-top:40px"><a class="btn" href="${esc(CFG.line_url)}" target="_blank" rel="noopener">${ph('掲示のお知らせは|公式LINEで')}</a></div>`:''}<div class="wmk">${ME.ps?'MEMBERS ONLY':esc(ME.n)+' 様 専用'}</div></div>`;
   $$('.dates button').forEach(b=>b.onclick=()=>{ UI.date=b.dataset.d; members(); });
@@ -622,6 +623,7 @@ function resBlock(r,cost,ret){ const o=(r&&r.result&&r.result.order)||[]; if(!o.
 
  
 function paneSel(){
+  if(!DATES().length){ $('#pane').innerHTML=waitMsg('Special Selection','スペシャル・|セレクション'); return; }    
   const date=UI.date, S=SEC['s:'+date]||{}, picks=S.picks||{}, setl=S.settled||{};
   const ids=Object.keys(picks).sort((a,b)=>((raceOf(date,a)||{}).time||'').localeCompare((raceOf(date,b)||{}).time||''));
   const last=ids.map(i=>picks[i].updated_at).sort().pop();
@@ -648,6 +650,7 @@ function paneSel(){
  
 function patOf(pid){ return (PUB.patterns||[]).find(p=>p.id===pid)||{}; }
 function paneSig(){
+  if(!DATES().length){ $('#pane').innerHTML=waitMsg('Pattern Signal','パターン・|シグナル'); return; }
   const date=UI.date, G=SEC['g:'+date]||{}, cands=G.cands||{}, dec=G.decided||{}, setl=G.settled||{}, PS=PUB.patterns||[], dm=CFG.decide_min||7;
   const rk=k=>(cands[k]||dec[k]||{}).race||{};
   const ids=[...new Set(Object.keys(cands).concat(Object.keys(dec)))].sort((a,b)=>(rk(a).time||'').localeCompare(rk(b).time||''));
