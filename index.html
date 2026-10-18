@@ -106,6 +106,17 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .recpub h3 span{font-family:var(--sans);font-size:11px;letter-spacing:.1em;color:var(--mute)}
 .recpub .blk+.blk{margin-top:44px}
 .recpub .rlist{margin-top:18px}
+.recpub .mtab{margin-top:18px}
+.ritem .row{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:baseline;padding:13px 0}
+.recnote{margin-top:34px;text-align:center;font-size:12px;letter-spacing:.12em;color:var(--mute);line-height:2}
+.rday+.rday{margin-top:14px}
+.rdh{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:baseline;padding:16px 0 6px;border-bottom:1px solid var(--rule)}
+.rdh .dt{font-family:var(--en);font-size:15px;letter-spacing:.08em;font-variant-numeric:lining-nums}
+.rdh .n{font-size:11px;letter-spacing:.1em;color:var(--mute)}
+.rdh .pf{font-family:var(--en);font-size:17px;font-variant-numeric:lining-nums tabular-nums}
+.rdh .pf.pos{color:var(--gold)}
+.rdh .pf.zero{color:var(--mute)}
+button.more{display:block;margin:26px auto 0;padding:11px 28px;border:1px solid var(--rule);background:transparent;color:var(--ink2);font-size:12px;letter-spacing:.2em}
 .hx{display:flex;flex-wrap:wrap;gap:6px 18px;padding:10px 0 4px;font-size:13px;letter-spacing:.04em;font-variant-numeric:lining-nums}
 .hx b{font-family:var(--jp);font-weight:400;margin-right:5px;color:var(--gold)}
 .hx span.hit{color:var(--gold)}
@@ -440,7 +451,6 @@ function landing(){
     <div class="s">${ph('ご入会後すぐ、|会員限定の投稿で|パスをお知らせします。')}</div>
   </div></section>
   ${footer()}`;
-  const rp=$('.recpub'); if(rp) rp.onclick=e=>{ const b=e.target.closest('button[data-o]'); if(!b) return; UI.open[b.dataset.o]=!UI.open[b.dataset.o]; rp.innerHTML=pubRecord(); };
   fades();
 }
 function kpi(s){ const roi=s.cost?(s.ret/s.cost*100):null;
@@ -454,19 +464,24 @@ function btBox(p){ const b=p.bt; if(!b) return '';
     <div class="yr">${(b.years||[]).map(y=>`<div><div class="l">${esc(y[0])}</div><div class="v">${y[1]}<small>%</small></div></div>`).join('')}</div>
     ${[b.forward,b.caveat,b.note,'過去の成績は、|将来の成績を|保証するものでは|ありません。'].filter(Boolean).map(x=>`<div class="note">${ph(x)}</div>`).join('')}</div>`; }
 function pubRecord(){
+   
   const R=(PUB&&PUB.rec)||{}, P=(PUB&&PUB.patterns)||[], H=(PUB&&PUB.hist)||[];
-  const list=k=>{ const items=H.filter(i=>i.k===k); if(!items.length) return '';
-    return `<div class="rlist">${items.map(i=>{ const id='h'+k+i.d+(i.race.place||'')+(i.race.R||''), pl=(i.ret||0)-(i.cost||0);
-      return `<div class="ritem"><button data-o="${id}"><span class="dt">${+i.d.slice(4,6)}.${+i.d.slice(6)}</span><span class="rn2">${esc(i.race.place||'')}${esc(i.race.R||'')}R　${esc(i.race.name||'')}</span><span class="pf ${pl>0?'pos':i.cost?'':'zero'}">${i.cost?(pl>0?'+':'')+yen(pl):'見送り'}</span></button>${UI.open[id]?histDx(i):''}</div>`; }).join('')}</div>`; };
-  const blk=(nm,k,s)=>`<div class="blk"><h3>${nm}<span>${s&&s.first?`${fmtD(s.first)} — ${fmtD(s.last)}`:''}</span></h3>${s&&s.n?kpi(s)+list(k):`<div class="empty">${ph('運用開始の日から、|すべての掲示を|ここに載せます。')}</div>`}</div>`;
-  return blk('SPECIAL SELECTION','sel',R.sel)+blk('PATTERN SIGNAL','sig',R.sig)+P.map(btBox).join(''); }
-function histDx(i){ const nm=u=>(i.names||{})[u]||'', MK=['◎','○','▲','△','☆','注'];
+  const recent=k=>{ const items=H.filter(i=>i.k===k).slice(0,5); if(!items.length) return '';
+    return `<div class="rlist">${items.map(i=>{ const pl=(i.ret||0)-(i.cost||0);
+      return `<div class="ritem"><div class="row"><span class="dt">${+i.d.slice(4,6)}.${+i.d.slice(6)}</span><span class="rn2">${esc(i.race.place||'')}${esc(i.race.R||'')}R　${esc(i.race.name||'')}</span><span class="pf ${pl>0?'pos':i.cost?'':'zero'}">${i.cost?(pl>0?'+':'')+yen(pl):'見送り'}</span></div></div>`; }).join('')}</div>`; };
+  const months=s=>(s.months||[]).length>1?`<table class="mtab"><tr><th>月</th><th>レース</th><th>投資</th><th>払戻</th><th>回収率</th></tr>${s.months.slice().reverse().slice(0,6).map(m=>`<tr><td>${esc(m[0])}</td><td>${m[3]}</td><td>${yen(m[1])}</td><td>${yen(m[2])}</td><td>${pct(m[2],m[1])}%</td></tr>`).join('')}</table>`:'';
+  const blk=(nm,k,s)=>`<div class="blk"><h3>${nm}<span>${s&&s.first?`${fmtD(s.first)} — ${fmtD(s.last)}`:''}</span></h3>${s&&s.n?kpi(s)+months(s)+recent(k):`<div class="empty">${ph('運用開始の日から、|すべての掲示を|ここに載せます。')}</div>`}</div>`;
+  const note=(R.sel&&R.sel.n)||(R.sig&&R.sig.n)?`<div class="recnote">${ph('すべての掲示と買い目は、|会員ページの RECORD に|そのまま残しています。')}</div>`:'';
+  return blk('SPECIAL SELECTION','sel',R.sel)+blk('PATTERN SIGNAL','sig',R.sig)+note+P.map(btBox).join(''); }
+function recDx(k,x){
+   
+  const nm=u=>(x.names||{})[u]||'', MK=['◎','○','▲','△','☆','注'];
   let h='<div class="dx">';
-  if(i.k==='sel'){ const mk=Object.entries(i.marks||{}).sort((a,b)=>MK.indexOf(a[1])-MK.indexOf(b[1])); if(mk.length) h+=`<div class="hx">${mk.map(([u,m])=>`<span><b>${esc(m)}</b>${esc(u)} ${esc(nm(u))}</span>`).join('')}</div>`; }
-  else{ const cs=i.cands||[]; if(cs.length) h+=`<div class="hx">${cs.map(c=>`<span class="${c.hit?'hit':''}">${esc(c.uno)} ${esc(c.name||'')}</span>`).join('')}</div>`; }
-  if(i.order&&i.order.length) h+=`<div class="hx res2"><b>RESULT</b>${i.order.slice(0,3).map(u=>`<span>${esc(u)} ${esc(nm(u))}</span>`).join('')}</div>`;
-  h+=(i.bets||[]).map(b=>betRow(b,b)).join('');
-  if(i.cost) h+=`<div class="hx sum"><span>投資 ${yen(i.cost)}円</span><span>払戻 ${yen(i.ret)}円</span></div>`;
+  if(k==='sel'){ const mk=Object.entries(x.marks||{}).sort((a,b)=>MK.indexOf(a[1])-MK.indexOf(b[1])); if(mk.length) h+=`<div class="hx">${mk.map(([u,m])=>`<span><b>${esc(m)}</b>${esc(u)} ${esc(nm(u))}</span>`).join('')}</div>`; }
+  else{ const cs=x.cands||[]; if(cs.length) h+=`<div class="hx">${cs.map(c=>`<span class="${c.hit?'hit':''}">${esc(c.uno)} ${esc(c.name||'')}</span>`).join('')}</div>`; }
+  if(x.order&&x.order.length) h+=`<div class="hx res2"><b>RESULT</b>${x.order.slice(0,3).map(u=>`<span>${esc(u)} ${esc(nm(u))}</span>`).join('')}</div>`;
+  h+=(x.bets||[]).map(b=>betRow(b,b)).join('');
+  if(x.cost) h+=`<div class="hx sum"><span>投資 ${yen(x.cost)}円</span><span>払戻 ${yen(x.ret)}円</span></div>`;
   return h+'</div>'; }
 function fmtD(d){ d=String(d||''); return d.length===8?`${d.slice(0,4)}.${+d.slice(4,6)}.${+d.slice(6)}`:d; }
 function footer(){ return `<footer class="foot"><div class="wrap">
@@ -651,15 +666,20 @@ function paneRec(){
   if(s.n){
     h+=`<div class="kpis" style="border-top:0"><div><div class="v" style="font-size:24px">${yen(s.cost)}</div><div class="l">投資</div></div><div><div class="v" style="font-size:24px">${yen(s.ret)}</div><div class="l">払戻</div></div><div><div class="v" style="font-size:24px;${s.ret-s.cost>0?'color:var(--gold)':''}">${s.ret-s.cost>0?'+':''}${yen(s.ret-s.cost)}</div><div class="l">収支</div></div></div>`;
     h+=`<table class="mtab" style="margin-top:30px"><tr><th>月</th><th>レース</th><th>投資</th><th>払戻</th><th>回収率</th></tr>${(s.months||[]).slice().reverse().map(m=>`<tr><td>${esc(m[0])}</td><td>${m[3]}</td><td>${yen(m[1])}</td><td>${yen(m[2])}</td><td>${pct(m[2],m[1])}%</td></tr>`).join('')}</table>`;
-    const items=[]; Object.keys(days).sort().reverse().forEach(d=>Object.entries(days[d]).forEach(([rid,x])=>items.push([d,rid,x])));
-    h+=`<div class="rlist" style="margin-top:30px">${items.map(([d,rid,x])=>{ const k=d+rid, pl=(x.ret||0)-(x.cost||0), r=x.race||{};
-      return `<div class="ritem"><button data-o="${k}"><span class="dt">${+d.slice(4,6)}.${+d.slice(6)}</span><span class="rn2">${esc(r.place)}${esc(r.R)}R　${esc(r.name||'')}</span><span class="pf ${pl>0?'pos':x.cost?'':'zero'}">${x.cost?(pl>0?'+':'')+yen(pl):'見送り'}</span></button>
-        ${UI.open[k]?`<div class="dx">${(x.bets||[]).map(b=>betRow(b,b)).join('')}</div>`:''}</div>`; }).join('')}</div>`;
+     
+    const dl=Object.keys(days).sort().reverse(), shown=dl.slice(0,UI.more||30);
+    h+=`<div class="rlist" style="margin-top:30px">${shown.map(d=>{ const es=Object.entries(days[d]).sort((a,b)=>((a[1].race||{}).time||'').localeCompare((b[1].race||{}).time||''));
+      const c=es.reduce((a,[,x])=>a+(x.cost||0),0), r=es.reduce((a,[,x])=>a+(x.ret||0),0), pl=r-c;
+      return `<div class="rday"><div class="rdh"><span class="dt">${fmtD(d)}</span><span class="n">${es.filter(([,x])=>x.cost).length}鞍</span><span class="pf ${pl>0?'pos':c?'':'zero'}">${c?(pl>0?'+':'')+yen(pl):'—'}</span></div>
+        ${es.map(([rid,x])=>{ const k=d+rid, pl=(x.ret||0)-(x.cost||0), rc=x.race||{};
+          return `<div class="ritem"><button data-o="${k}"><span class="dt">${esc(rc.time||'')}</span><span class="rn2">${esc(rc.place||'')}${esc(rc.R||'')}R　${esc(rc.name||'')}</span><span class="pf ${pl>0?'pos':x.cost?'':'zero'}">${x.cost?(pl>0?'+':'')+yen(pl):'見送り'}</span></button>${UI.open[k]?recDx(UI.rk,x):''}</div>`; }).join('')}</div>`; }).join('')}</div>`;
+    if(dl.length>shown.length) h+=`<button class="more" data-more="1">さらに表示（あと ${dl.length-shown.length} 日）</button>`;
   }
   if(UI.rk==='sig') h+=(PUB.patterns||[]).map(btBox).join('');
   $('#pane').innerHTML=h;
   $$('.seg button').forEach(b=>b.onclick=()=>{ UI.rk=b.dataset.k; members(); });
   $$('.ritem>button').forEach(b=>b.onclick=()=>{ UI.open[b.dataset.o]=!UI.open[b.dataset.o]; paneRec(); });
+  $$('button.more').forEach(b=>b.onclick=()=>{ UI.more=(UI.more||30)+30; paneRec(); });
 }
 
  
