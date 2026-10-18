@@ -297,8 +297,8 @@ button.more{display:block;margin:26px auto 0;padding:11px 28px;border:1px solid 
 .muted{color:var(--mute);font-size:12px}
 .intro{border:1px solid var(--rule2);padding:18px 20px;font-size:13px;color:var(--ink2);margin-top:22px;line-height:1.95;background:transparent}
 .intro b{font-weight:500;color:var(--ink)}
-.seg{display:flex;justify-content:center;gap:0;margin:24px auto 0;border:1px solid var(--rule);width:max-content}
-.seg button{font-family:var(--en);font-size:12px;letter-spacing:.22em;padding:8px 18px 7px 20px;color:var(--mute)}
+.seg{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:0;margin:24px auto 0;border:1px solid var(--rule);width:max-content}   
+.seg button{font-family:var(--en);font-size:12px;letter-spacing:.22em;padding:8px 22px 7px;text-indent:.22em;text-align:center;color:var(--mute)}
 .seg button.on{background:var(--gold);color:var(--onGold)}
 .mtab{width:100%;border-collapse:collapse;margin-top:12px;font-size:13px}
 .mtab th{font-weight:400;font-size:11px;letter-spacing:.1em;color:var(--mute);text-align:right;padding:8px 0;border-bottom:1px solid var(--rule)}
@@ -707,7 +707,6 @@ function paneRec(){
           return `<div class="ritem"><button data-o="${k}"><span class="dt">${esc(rc.time||'')}</span><span class="rn2">${esc(rc.place||'')}${esc(rc.R||'')}R　${esc(rc.name||'')}</span><span class="pf ${pl>0?'pos':x.cost?'':'zero'}">${x.cost?(pl>0?'+':'')+yen(pl):'見送り'}</span></button>${UI.open[k]?recDx(UI.rk,x):''}</div>`; }).join('')}</div>`; }).join('')}</div>`;
     if(dl.length>shown.length) h+=`<button class="more" data-more="1">さらに表示（あと ${dl.length-shown.length} 日）</button>`;
   }
-  if(UI.rk==='sig') h+=(PUB.patterns||[]).map(btBox).join('');
   $('#pane').innerHTML=h;
   $$('.seg button').forEach(b=>b.onclick=()=>{ UI.rk=b.dataset.k; members(); });
   $$('.ritem>button').forEach(b=>b.onclick=()=>{ UI.open[b.dataset.o]=!UI.open[b.dataset.o]; paneRec(); });
