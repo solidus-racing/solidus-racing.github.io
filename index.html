@@ -105,6 +105,12 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .recpub h3{font-family:var(--en);font-weight:500;font-size:16px;letter-spacing:.24em;margin:0 0 14px;display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:2px 12px;white-space:nowrap}
 .recpub h3 span{font-family:var(--sans);font-size:11px;letter-spacing:.1em;color:var(--mute)}
 .recpub .blk+.blk{margin-top:44px}
+.recpub .rlist{margin-top:18px}
+.hx{display:flex;flex-wrap:wrap;gap:6px 18px;padding:10px 0 4px;font-size:13px;letter-spacing:.04em;font-variant-numeric:lining-nums}
+.hx b{font-family:var(--jp);font-weight:400;margin-right:5px;color:var(--gold)}
+.hx span.hit{color:var(--gold)}
+.hx.res2 b{font-family:var(--en);font-size:11px;letter-spacing:.2em;color:var(--mute);margin-right:4px}
+.hx.sum{justify-content:flex-end;padding-top:12px;font-family:var(--en);font-size:14px;color:var(--ink2)}
 .bt{border:1px solid var(--rule);background:var(--card);padding:26px 24px;margin-top:22px}
 .bt .h{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
 .bt .h b{font-family:var(--jp);font-weight:500;font-size:15px;letter-spacing:.08em}
@@ -434,6 +440,7 @@ function landing(){
     <div class="s">${ph('ご入会後すぐ、|会員限定の投稿で|パスをお知らせします。')}</div>
   </div></section>
   ${footer()}`;
+  const rp=$('.recpub'); if(rp) rp.onclick=e=>{ const b=e.target.closest('button[data-o]'); if(!b) return; UI.open[b.dataset.o]=!UI.open[b.dataset.o]; rp.innerHTML=pubRecord(); };
   fades();
 }
 function kpi(s){ const roi=s.cost?(s.ret/s.cost*100):null;
@@ -447,8 +454,20 @@ function btBox(p){ const b=p.bt; if(!b) return '';
     <div class="yr">${(b.years||[]).map(y=>`<div><div class="l">${esc(y[0])}</div><div class="v">${y[1]}<small>%</small></div></div>`).join('')}</div>
     ${[b.forward,b.caveat,b.note,'過去の成績は、|将来の成績を|保証するものでは|ありません。'].filter(Boolean).map(x=>`<div class="note">${ph(x)}</div>`).join('')}</div>`; }
 function pubRecord(){
-  const R=(PUB&&PUB.rec)||{}, P=(PUB&&PUB.patterns)||[], blk=(nm,jp,s)=>`<div class="blk"><h3>${nm}<span>${s&&s.first?`${fmtD(s.first)} — ${fmtD(s.last)}`:''}</span></h3>${s&&s.n?kpi(s):`<div class="empty">${ph('運用開始の日から、|すべての掲示を|ここに載せます。')}</div>`}</div>`;
-  return blk('SPECIAL SELECTION','',R.sel)+blk('PATTERN SIGNAL','',R.sig)+P.map(btBox).join(''); }
+  const R=(PUB&&PUB.rec)||{}, P=(PUB&&PUB.patterns)||[], H=(PUB&&PUB.hist)||[];
+  const list=k=>{ const items=H.filter(i=>i.k===k); if(!items.length) return '';
+    return `<div class="rlist">${items.map(i=>{ const id='h'+k+i.d+(i.race.place||'')+(i.race.R||''), pl=(i.ret||0)-(i.cost||0);
+      return `<div class="ritem"><button data-o="${id}"><span class="dt">${+i.d.slice(4,6)}.${+i.d.slice(6)}</span><span class="rn2">${esc(i.race.place||'')}${esc(i.race.R||'')}R　${esc(i.race.name||'')}</span><span class="pf ${pl>0?'pos':i.cost?'':'zero'}">${i.cost?(pl>0?'+':'')+yen(pl):'見送り'}</span></button>${UI.open[id]?histDx(i):''}</div>`; }).join('')}</div>`; };
+  const blk=(nm,k,s)=>`<div class="blk"><h3>${nm}<span>${s&&s.first?`${fmtD(s.first)} — ${fmtD(s.last)}`:''}</span></h3>${s&&s.n?kpi(s)+list(k):`<div class="empty">${ph('運用開始の日から、|すべての掲示を|ここに載せます。')}</div>`}</div>`;
+  return blk('SPECIAL SELECTION','sel',R.sel)+blk('PATTERN SIGNAL','sig',R.sig)+P.map(btBox).join(''); }
+function histDx(i){ const nm=u=>(i.names||{})[u]||'', MK=['◎','○','▲','△','☆','注'];
+  let h='<div class="dx">';
+  if(i.k==='sel'){ const mk=Object.entries(i.marks||{}).sort((a,b)=>MK.indexOf(a[1])-MK.indexOf(b[1])); if(mk.length) h+=`<div class="hx">${mk.map(([u,m])=>`<span><b>${esc(m)}</b>${esc(u)} ${esc(nm(u))}</span>`).join('')}</div>`; }
+  else{ const cs=i.cands||[]; if(cs.length) h+=`<div class="hx">${cs.map(c=>`<span class="${c.hit?'hit':''}">${esc(c.uno)} ${esc(c.name||'')}</span>`).join('')}</div>`; }
+  if(i.order&&i.order.length) h+=`<div class="hx res2"><b>RESULT</b>${i.order.slice(0,3).map(u=>`<span>${esc(u)} ${esc(nm(u))}</span>`).join('')}</div>`;
+  h+=(i.bets||[]).map(b=>betRow(b,b)).join('');
+  if(i.cost) h+=`<div class="hx sum"><span>投資 ${yen(i.cost)}円</span><span>払戻 ${yen(i.ret)}円</span></div>`;
+  return h+'</div>'; }
 function fmtD(d){ d=String(d||''); return d.length===8?`${d.slice(0,4)}.${+d.slice(4,6)}.${+d.slice(6)}`:d; }
 function footer(){ return `<footer class="foot"><div class="wrap">
   <div class="wm">${esc(CFG.brand)}</div>
