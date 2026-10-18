@@ -51,7 +51,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 
 .hero{min-height:calc(100svh - 56px);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:64px 24px 72px;position:relative}
 .hero .bg{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
-.hero .bg img{position:absolute;left:44%;top:35%;width:min(165vw,960px);max-width:none;transform:translate(-50%,-50%);opacity:var(--hero-op,.16);
+.hero .bg img{position:absolute;left:44%;top:30%;width:min(165vw,960px);max-width:none;transform:translate(-50%,-50%);opacity:var(--hero-op,.16);
   filter:grayscale(1) contrast(1.08) brightness(.9);mix-blend-mode:screen;
   -webkit-mask-image:radial-gradient(ellipse 48% 52% at 50% 50%,#000 30%,transparent 72%);mask-image:radial-gradient(ellipse 48% 52% at 50% 50%,#000 30%,transparent 72%)}
 .hero>*:not(.bg){position:relative;z-index:1}
@@ -108,7 +108,8 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .recpub h3{font-family:var(--en);font-weight:500;font-size:16px;letter-spacing:.24em;margin:0 0 14px;display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:2px 12px;white-space:nowrap}
 .recpub h3 span{font-family:var(--sans);font-size:11px;letter-spacing:.1em;color:var(--mute)}
 .recpub .blk+.blk{margin-top:44px}
-.recpub .rlist{margin-top:18px}
+.recpub .rlist{margin-top:6px}
+.rcap{margin-top:22px;font-family:var(--en);font-size:11px;letter-spacing:.24em;color:var(--mute)}
 .recpub .mtab{margin-top:18px}
 .kpis.sub{border-top:0}
 .kpis.sub .v{font-size:24px}
@@ -475,8 +476,8 @@ function btBox(p){ const b=p.bt; if(!b) return '';
 function pubRecord(){
    
   const R=(PUB&&PUB.rec)||{}, P=(PUB&&PUB.patterns)||[], H=(PUB&&PUB.hist)||[];
-  const recent=k=>{ const items=H.filter(i=>i.k===k).slice(0,5); if(!items.length) return '';
-    return `<div class="rlist">${items.map(i=>{ const id='h'+k+i.d+(i.race.place||'')+(i.race.R||''), pl=(i.ret||0)-(i.cost||0);
+  const recent=k=>{ const items=H.filter(i=>i.k===k); if(!items.length) return '';
+    return `<div class="rcap">LAST 30 DAYS</div><div class="rlist">${items.map(i=>{ const id='h'+k+i.d+(i.race.place||'')+(i.race.R||''), pl=(i.ret||0)-(i.cost||0);
       return `<div class="ritem"><button data-o="${id}"><span class="dt">${+i.d.slice(4,6)}.${+i.d.slice(6)}</span><span class="rn2">${esc(i.race.place||'')}${esc(i.race.R||'')}R　${esc(i.race.name||'')}</span><span class="pf ${pl>0?'pos':i.cost?'':'zero'}">${i.cost?(pl>0?'+':'')+yen(pl):'見送り'}</span></button>${UI.open[id]?recDx(k,i):''}</div>`; }).join('')}</div>`; };
   const months=s=>(s.months||[]).length>1?`<table class="mtab"><tr><th>月</th><th>レース</th><th>投資</th><th>払戻</th><th>回収率</th></tr>${s.months.slice().reverse().slice(0,6).map(m=>`<tr><td>${esc(m[0])}</td><td>${m[3]}</td><td>${yen(m[1])}</td><td>${yen(m[2])}</td><td>${pct(m[2],m[1])}%</td></tr>`).join('')}</table>`:'';
   const blk=(nm,k,s)=>`<div class="blk"><h3>${nm}<span>${s&&s.first?`${fmtD(s.first)} — ${fmtD(s.last)}`:''}</span></h3>${s&&s.n?kpi(s)+months(s)+recent(k):`<div class="empty">${ph('運用開始の日から、|すべての掲示を|ここに載せます。')}</div>`}</div>`;
