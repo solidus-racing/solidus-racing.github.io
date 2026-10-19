@@ -503,11 +503,12 @@ function subKpi(s){ const pl=(s.ret||0)-(s.cost||0);
 function recDx(k,x){
    
    
-  const nm=u=>(x.names||{})[u]||'', MK=['◎','○','▲','△','☆','注'], top3=(x.order||[]).slice(0,3);
+  const nm=u=>(x.names||{})[u]||'', MK=['◎','○','▲','△','☆','注'], ord=x.order||[], top3=ord.slice(0,3);
+  const pos=u=>ord.indexOf(+u), lab=u=>{ const p=pos(u); return p>=0?`<small>${p+1}着</small>`:''; };    
   let h='<div class="dx">';
   if(k==='sel'){ const mk=Object.entries(x.marks||{}).sort((a,b)=>MK.indexOf(a[1])-MK.indexOf(b[1]));
-    if(mk.length) h+=`<ul class="hv">${mk.map(([u,m])=>{ const f=top3.indexOf(+u); return `<li class="${f>=0?'fin':''}"><span class="mk">${esc(m)}</span><span class="no">${esc(u)}</span><span class="nm">${esc(nm(u))}${f>=0?`<small>${f+1}着</small>`:''}</span></li>`; }).join('')}</ul>`; }
-  else{ const cs=x.cands||[]; if(cs.length) h+=`<ul class="hv">${cs.map(c=>{ const f=top3.indexOf(+c.uno); return `<li class="${c.hit?'hit':''}${f>=0?' fin':''}"><span class="mk"></span><span class="no">${esc(c.uno)}</span><span class="nm">${esc(c.name||'')}${f>=0?`<small>${f+1}着</small>`:''}</span></li>`; }).join('')}</ul>`; }
+    if(mk.length) h+=`<ul class="hv">${mk.map(([u,m])=>`<li class="${pos(u)>=0&&pos(u)<3?'fin':''}"><span class="mk">${esc(m)}</span><span class="no">${esc(u)}</span><span class="nm">${esc(nm(u))}${lab(u)}</span></li>`).join('')}</ul>`; }
+  else{ const cs=x.cands||[]; if(cs.length) h+=`<ul class="hv">${cs.map(c=>`<li class="${c.hit?'hit':''}${pos(c.uno)>=0&&pos(c.uno)<3?' fin':''}"><span class="mk"></span><span class="no">${esc(c.uno)}</span><span class="nm">${esc(c.name||'')}${lab(c.uno)}</span></li>`).join('')}</ul>`; }
   if(top3.length) h+=`<div class="rcap" style="margin-top:14px">RESULT</div><ul class="hv res">${top3.map((u,i)=>`<li><span class="mk">${i+1}着</span><span class="no">${esc(u)}</span><span class="nm">${esc(nm(u))}</span></li>`).join('')}</ul>`;
   h+=(x.bets||[]).map(b=>betRow(b,b)).join('');
   if(x.cost) h+=`<div class="hx sum"><span>投資 ${yen(x.cost)}円</span><span>払戻 ${yen(x.ret)}円</span></div>`;
@@ -636,8 +637,8 @@ function paneSel(){
     const sb=st?st.bets:null;
     const won=st&&st.ret>0;
     h+=`<article class="rc ${won?'hitc':''}">${p.level?`<span class="lv">LEVEL ${esc(p.level)}</span>`:''}${rcHead(r)}
-      <ul class="marks">${mk.map(([u,m])=>{ const hh=runner(r,u), od=oddsOf(r,u), fin=top3.indexOf(+u), lo=LIVE[r.rid], scr=!!hh.scr||(lo&&lo.m[u]===null&&Object.values(lo.m).some(v=>v>0));
-        return `<li class="${fin>=0?'fin':''}${scr?' scr':''}"><span class="mk">${esc(m)}</span>${cap(u,hh.waku)}<span class="hn">${esc(hh.name||'')}${fin>=0?`<small>${fin+1}着</small>`:''}</span><span class="od">${scr?'<small>取消</small>':od?od.toFixed(1):''}<small>${!scr&&od?'倍':''}</small></span></li>`; }).join('')}</ul>
+      <ul class="marks">${mk.map(([u,m])=>{ const hh=runner(r,u), od=oddsOf(r,u), pos=ord.indexOf(+u), fin=(pos>=0&&pos<3)?pos:-1, lo=LIVE[r.rid], scr=!!hh.scr||(lo&&lo.m[u]===null&&Object.values(lo.m).some(v=>v>0));
+        return `<li class="${fin>=0?'fin':''}${scr?' scr':''}"><span class="mk">${esc(m)}</span>${cap(u,hh.waku)}<span class="hn">${esc(hh.name||'')}${pos>=0?`<small>${pos+1}着</small>`:''}</span><span class="od">${scr?'<small>取消</small>':od?od.toFixed(1):''}<small>${!scr&&od?'倍':''}</small></span></li>`; }).join('')}</ul>
       ${(p.bets||[]).length?`<div class="bets"><div class="bh"><span>買い目</span><span>金額</span></div>${p.bets.map((b,i)=>betRow(b,sb&&sb[i])).join('')}
         <div class="tot"><span>合計</span><span class="num">${yen(p.bets.reduce((a,b)=>a+expand(b).length*b.unit,0))}<span class="muted" style="font-family:var(--sans);font-size:11px">　円</span></span></div></div>`:''}
       ${p.comment?`<div class="cm">${esc(p.comment)}</div>`:''}
