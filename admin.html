@@ -158,7 +158,7 @@ function gate(msg){
   $('#k').onkeydown=e=>{ if(e.key==='Enter') $('#go').click(); };
   $('#go').onclick=async()=>{ const env=await openWith($('#k').value); if(!env) return $('#e').textContent='鍵が違うか、期限が切れています。';
     if(!env.ed) return $('#e').textContent='セレクター用の鍵ではありません。'; ls.set('ecr_ak',$('#k').value); start(); }; }
-async function start(){ $('#who').innerHTML=`${esc(ME.n)}${PREVIEW?'　<span style="color:#8E3B2E">見本（保存は端末内）</span>':''}`;
+async function start(){ $('#who').innerHTML=CFG.practice?'<span style="color:#8E3B2E">練習ページ ― ここで保存しても公開されません（この端末の中にだけ残ります）</span>':`${esc(ME.n)}${PREVIEW?'　<span style="color:#8E3B2E">見本（保存は端末内）</span>':''}`;
   const ds=days(); if(!UI.date||!ds.includes(UI.date)) UI.date=ds[0]; if(!UI.date){ $('#app').innerHTML='<div class="gate">次の開催の出馬表が出ると、ここに出ます。</div>'; return; }
   await loadPicks(); listView(); }
 async function loadPicks(){ const r=await api({action:'list',date:UI.date}); UI.picks=(r&&r.ok&&r.picks&&r.picks[UI.date])||{}; }
@@ -245,7 +245,9 @@ function newBet(){ const nb=UI.nb, k=SIZE[nb.type], b={type:nb.type,method:nb.me
   else b.legs=nb.legs.slice(0,k).map(l=>l.slice());
   return b; }
 
-(async()=>{ ENC=await fetch('enc.json?_='+Date.now(),{cache:'no-store'}).then(r=>r.ok?r.json():null).catch(()=>null);
+(async()=>{
+  if(CFG.practice){ SEC=CFG.practice_sec||{}; ME={n:'練習',ed:true}; KEY=''; start(); return; }    
+  ENC=await fetch('enc.json?_='+Date.now(),{cache:'no-store'}).then(r=>r.ok?r.json():null).catch(()=>null);
   const k=ls.get('ecr_ak'); if(k&&await openWith(k)&&ME.ed) start(); else gate(); })();
 </script>
 </body>
