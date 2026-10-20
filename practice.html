@@ -192,7 +192,7 @@ function render(){
   else pick=[...Array(k).keys()].map(i=>`<div class="lab">${o?(i+1)+'着':(i+1)+'頭目'}</div>${chipRow('legs',i)}`).join('');
   const cur=newBet(), n=cur?expand(cur).length:0;
   const total=D.bets.reduce((a,b)=>a+expand(b).length*b.unit,0);
-  const cap=+CFG.sel_max_yen||0, over=cap&&total>cap, room=cap?cap-total:Infinity, addOver=cap&&n*nb.unit>room;    
+  const capY=+CFG.sel_max_yen||0, over=capY&&total>capY, room=capY?capY-total:Infinity, addOver=capY&&n*nb.unit>room;    
   $('#app').innerHTML=`<div class="wrap ed"><button class="back" id="bk">← レース一覧</button>
     <div class="rh"><div class="k">${esc(r.place)}<b>${esc(r.R)}R</b>　<span style="font-family:var(--en);font-size:18px;color:var(--ink2)">${esc(r.time)}</span></div><div class="nm">${esc(r.name)}</div><div class="m">${esc(r.surface||'')}${esc(r.dist||'')}m　${hs.length}頭</div></div>
     ${lk?`<div class="lock">${ph('締め切り（発走'+(CFG.sel_deadline_min||0)+'分前）を|過ぎたため、|変更できません。')}</div>`:''}
@@ -201,7 +201,7 @@ function render(){
       <div class="mks">${MARKS.map(m=>`<button data-u="${h.uno}" data-m="${m}" class="${D.marks[h.uno]===m?'on':''}">${m}</button>`).join('')}</div></div>`).join('')}
     <h3><span>確信度</span></h3>
     <div class="seg" id="lv">${[['S','S'],['A','A'],['B','B'],['','なし']].map(x=>`<button data-v="${x[0]}" class="${(D.level||'')===x[0]?'on':''}">${x[1]}</button>`).join('')}</div>
-    <h3><span>買い目</span><span style="${over?'color:#8E3B2E':''}">合計 ${yen(total)}円${cap?`<small style="color:${over?'#8E3B2E':'var(--mute)'};margin-left:8px">／ 上限 ${yen(cap)}円${over?'を超えています':''}</small>`:''}</span></h3>
+    <h3><span>買い目</span><span style="${over?'color:#8E3B2E':''}">合計 ${yen(total)}円${capY?`<small style="color:${over?'#8E3B2E':'var(--mute)'};margin-left:8px">／ 上限 ${yen(capY)}円${over?'を超えています':''}</small>`:''}</span></h3>
     ${D.bets.map((b,i)=>`<div class="bt"><span class="t">${esc(b.type)}<small>${esc(b.method==='通常'?'':b.method==='BOX'?'ボックス':b.method+(b.multi?'・マルチ':''))}</small><span class="c">${esc(betText(b))}</span></span>
       <span class="a">${yen(expand(b).length*b.unit)}<small>${expand(b).length}点 × ${yen(b.unit)}</small></span><button class="x" data-i="${i}">削除</button></div>`).join('')||'<div class="note">まだありません。</div>'}
     <div class="box" style="margin-top:14px">
@@ -210,14 +210,14 @@ function render(){
       ${pick}
       <div class="lab">1点あたり（円・100円単位）</div><input type="number" id="un" min="100" step="100" value="${nb.unit}">
       <div class="calc"><span>${n}点 × ${yen(nb.unit)}円</span><b style="${addOver?'color:#8E3B2E':''}">${yen(n*nb.unit)}円</b></div>
-      ${addOver?`<div class="note" style="color:#8E3B2E">${ph('加えると上限 '+yen(cap)+'円を|超えます（あと '+yen(Math.max(0,room))+'円）。')}</div>`:''}
+      ${addOver?`<div class="note" style="color:#8E3B2E">${ph('加えると上限 '+yen(capY)+'円を|超えます（あと '+yen(Math.max(0,room))+'円）。')}</div>`:''}
       <button class="btn w" id="add" style="margin-top:12px" ${n&&!lk&&!addOver?'':'disabled'}>この買い目を加える</button>
     </div>
     <h3><span>見解（任意・空欄なら表示されません）</span><span>${(D.comment||'').length} / 1200</span></h3>
     <textarea id="cm" maxlength="1200" placeholder="このレースを選んだ理由、展開、馬の見立てなど">${esc(D.comment)}</textarea>
     <div class="note">${ph('会員ページには、|書いたとおりの改行で|表示されます。')}</div>
   </div>
-  <div class="bar"><div class="in"><div class="msg" id="msg">${over?`買い目の合計が上限 ${yen(cap)}円を超えています。減らしてから掲示してください。`:UI.picks[UI.rid]?'保存済み。変更したら、もう一度「掲示する」を押してください。':'まだ掲示していません。'}</div>
+  <div class="bar"><div class="in"><div class="msg" id="msg">${over?`買い目の合計が上限 ${yen(capY)}円を超えています。減らしてから掲示してください。`:UI.picks[UI.rid]?'保存済み。変更したら、もう一度「掲示する」を押してください。':'まだ掲示していません。'}</div>
     ${UI.picks[UI.rid]&&!lk?'<button class="btn sm" id="del">取り下げ</button>':''}<button class="btn solid sm" id="save" ${lk||over?'disabled':''}>掲示する</button></div></div>`;
   $('#bk').onclick=()=>listView();
   $$('.mks button').forEach(b=>b.onclick=()=>{ if(lk) return; const u=+b.dataset.u, m=b.dataset.m;
