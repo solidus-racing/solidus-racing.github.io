@@ -166,7 +166,7 @@ function listView(){
   UI.rid=null; const d=SEC['d:'+UI.date]||{};
   const ds=days().map(x=>{ const t=new Date(+x.slice(0,4),+x.slice(4,6)-1,+x.slice(6)); return `<button data-d="${x}" class="${x===UI.date?'on':''}"><span class="d">${t.getMonth()+1}.${t.getDate()}</span><span class="w2">${'SUN MON TUE WED THU FRI SAT'.split(' ')[t.getDay()]}</span></button>`; }).join('');
   $('#app').innerHTML=`<div class="wrap"><nav class="dates">${ds}</nav>
-    <div class="note" style="text-align:center;margin-top:14px">${ph('選定したレースは、|保存すると数分で|会員ページに出ます。|締め切りは|発走'+(CFG.sel_deadline_min||0)+'分前です。')}</div>
+    <div class="note" style="text-align:center;margin-top:14px">${CFG.practice?ph('練習用の出馬表です。|本番と同じ操作で|印と買い目を入れて|「掲示する」を押すと、|この端末の中にだけ保存されます。|会員ページには出ません。'):ph('選定したレースは、|保存すると数分で|会員ページに出ます。|締め切りは|発走'+(CFG.sel_deadline_min||0)+'分前です。')}</div>
     <div class="list">${(d.races||[]).filter(r=>(r.runners||[]).length).map(r=>{ const p=UI.picks[r.rid], lk=locked(r);
       return `<button class="li" data-r="${r.rid}"><span class="t">${esc(r.time)}</span><span class="n">${esc(r.place)}${esc(r.R)}R　${esc(r.name)}<small>${esc(r.surface||'')}${esc(r.dist||'')}m　${(r.runners||[]).length}頭</small></span>
         <span class="s ${p?'on':''} ${lk&&!p?'lk':''}">${p?'選定済み':lk?'締切':'—'}</span></button>`; }).join('')}</div></div>`;
@@ -232,7 +232,7 @@ function render(){
   $('#save').onclick=async()=>{ D.comment=$('#cm').value; if(!Object.keys(D.marks).length&&!D.bets.length) return $('#msg').textContent='印か買い目を入れてください。';
     $('#save').disabled=true; $('#msg').textContent='保存しています…';
     const res=await api({action:'save',date:UI.date,rid:UI.rid,pick:D});
-    if(res&&res.ok){ UI.picks[UI.rid]=JSON.parse(JSON.stringify(D)); const y=scrollY; render(); scrollTo(0,y); $('#msg').textContent='保存しました。数分で会員ページに出ます。'; return; }
+    if(res&&res.ok){ UI.picks[UI.rid]=JSON.parse(JSON.stringify(D)); const y=scrollY; render(); scrollTo(0,y); $('#msg').textContent=CFG.practice?'練習として保存しました（この端末の中だけ。公開はされません）。':'保存しました。数分で会員ページに出ます。'; return; }
     else $('#msg').textContent='保存できませんでした（'+((res&&res.err)||'通信')+'）。もう一度押してください。';
     $('#save').disabled=false; };
   if($('#del')) $('#del').onclick=async()=>{ if(!confirm('このレースの選定を取り下げますか？')) return; const res=await api({action:'delete',date:UI.date,rid:UI.rid});
